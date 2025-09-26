@@ -8,7 +8,7 @@ import 'screens/landing_screen.dart';
 import 'screens/admin_login_screen.dart';
 import 'screens/user_login_screen.dart';
 import 'screens/Admin/admin_dashboard.dart';
-import 'screens/Passenger/UserDashboard/user_dashboard.dart';
+import 'screens/User/UserDashboard/user_dashboard.dart';
 import 'screens/signup_screen.dart';
 import 'screens/forgot_password_screen.dart';
 

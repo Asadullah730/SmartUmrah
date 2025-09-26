@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:smart_umrah_app/Screens/signup_screen.dart';
-import 'package:smart_umrah_app/screens/Passenger/UserDashboard/user_dashboard.dart';
+import 'package:smart_umrah_app/screens/User/UserDashboard/user_dashboard.dart';
 
 import 'package:smart_umrah_app/validation/auth_validation.dart';
 import 'package:smart_umrah_app/widgets/customButton.dart';

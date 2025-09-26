@@ -21,12 +21,7 @@ class SigninController extends GetxController {
 
       User? user = userCredential.user;
 
-      if (email == "admin@gmail.com" && password == "admin123") {
-        Get.toNamed(AppRoutes.admindashboard);
-        return;
-      }
-
-      // Step 2: Check if user is not null and email is verified
+      print("USER : $user");
       if (user != null && user.emailVerified) {
         // Step 3: Save info locally (optional but helpful)
         final prefs = await SharedPreferences.getInstance();
@@ -35,14 +30,12 @@ class SigninController extends GetxController {
         await prefs.setString('userUID', user.uid);
 
         DocumentSnapshot profileSnapshot = await FirebaseFirestore.instance
-            .collection('Profiles') // 🔁 Must match your Firestore collection
+            .collection('Users')
             .doc(user.uid)
             .get();
 
         if (profileSnapshot.exists) {
           Get.toNamed(AppRoutes.userdashboard);
-        } else {
-          // Get.toNamed(AppRoutes.createProfile);
         }
       } else {
         // 🚨 Email not verified

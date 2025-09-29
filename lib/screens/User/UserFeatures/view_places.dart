@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class ViewPlaces extends StatelessWidget {
-  const ViewPlaces({super.key});
+class ViewPlacesScreen extends StatelessWidget {
+  const ViewPlacesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

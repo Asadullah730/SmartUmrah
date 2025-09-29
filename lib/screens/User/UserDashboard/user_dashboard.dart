@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/DataLayer/UserData/user_features.dart';
 import 'package:smart_umrah_app/Services/firebaseServices/AuthServices/logout.dart';
-import '../UserFeatures/umrah_guide_screen.dart';
+import '../UserFeatures/UmrahGuide/umrah_guide_screen.dart';
 import '../UserFeatures/umrah_journal_screen.dart';
 import '../UserFeatures/travel_checklist_screen.dart';
 
@@ -271,10 +271,14 @@ class _UserDashboardState extends State<UserDashboard> {
       backgroundColor: primaryBackgroundColor,
       appBar: AppBar(
         backgroundColor: primaryBackgroundColor,
+        foregroundColor: Colors.white,
         elevation: 0,
         title: const Text(
           "User Dashboard",
-          style: TextStyle(color: textColorPrimary),
+          style: TextStyle(
+            color: textColorPrimary,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [
           IconButton(

@@ -34,18 +34,35 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-
+  # for firebase Auth
   firebase_core: ^4.1.0
   firebase_auth: ^6.0.2
+
+  # local storage for email verification
   shared_preferences: ^2.5.3
+
+  # lottie effect for email verification screen
   lottie: ^3.3.1
   percent_indicator: ^4.2.5
+
+  # for firebase database
   cloud_firestore: ^6.0.1
   firebase_storage: ^13.0.1
+
+  # picking Image from the gallery
   image_picker: ^1.2.0
+
+  # Use for statemanagement
   get: ^4.7.2
+
+  # Use for image storage, because firebase storage is paid
   supabase_flutter: ^2.10.1
+
+  # Use for date formate
   intl: ^0.20.2
+
+  
+  youtube_player_flutter: ^9.1.2
   
 
 dev_dependencies:

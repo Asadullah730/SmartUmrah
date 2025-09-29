@@ -2,19 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/routes/routes.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'firebase_options.dart';
-
-import 'screens/landing_screen.dart';
-import 'screens/admin_login_screen.dart';
-import 'screens/user_login_screen.dart';
-import 'screens/Admin/admin_dashboard.dart';
-import 'screens/User/UserDashboard/user_dashboard.dart';
-import 'screens/signup_screen.dart';
-import 'screens/forgot_password_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Supabase.initialize(
+    url: 'https://qnmjmhyxyyhuiyobdebk.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFubWptaHl4eXlodWl5b2JkZWJrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUwNzU4NjAsImV4cCI6MjA3MDY1MTg2MH0.YTNoraJyuxGOzhGvcratUWBfgK5sSKMQqmxTD_Hw7FE',
+  );
   runApp(const SmartUmrahApp());
 }
 

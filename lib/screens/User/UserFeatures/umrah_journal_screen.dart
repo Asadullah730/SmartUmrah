@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:smart_umrah_app/Services/SupabaseServices/supabaseStorage/image_storage.dart';
 
 class UmrahJournalScreen extends StatefulWidget {
   const UmrahJournalScreen({super.key});
@@ -25,6 +26,7 @@ class _UmrahJournalScreenState extends State<UmrahJournalScreen> {
 
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _contentController = TextEditingController();
+  final SupabaseService _supabaseService = SupabaseService();
   File? _imageFile;
 
   @override
@@ -57,21 +59,14 @@ class _UmrahJournalScreenState extends State<UmrahJournalScreen> {
     }
   }
 
-  // Upload image to Firebase Storage, return URL or null
+  // Upload image to Supabase and return the public URL
   Future<String?> _uploadImage() async {
-    if (_imageFile == null || _userId == null) return null;
-    final fileName = '${DateTime.now().millisecondsSinceEpoch}.png';
-    final destination = 'journal_photos/$_userId/$fileName';
-    final ref = FirebaseStorage.instance.ref().child(destination);
+    if (_imageFile == null) return null;
     try {
-      final task = await ref.putFile(_imageFile!);
-      final url = await ref.getDownloadURL();
-      return url;
-    } on FirebaseException catch (e) {
-      debugPrint('Upload error: ${e.message}');
-      return null;
+      final url = await _supabaseService.uploadImageToSupabase(_imageFile!);
+      return url; // This will be saved in Firestore
     } catch (e) {
-      debugPrint('Upload unexpected error: $e');
+      debugPrint("Upload failed: $e");
       return null;
     }
   }
@@ -327,49 +322,91 @@ class _UmrahJournalScreenState extends State<UmrahJournalScreen> {
                 ),
                 child: Card(
                   color: cardBackgroundColor,
+                  elevation: 3,
+                  shadowColor: Colors.black.withOpacity(0.15),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(16),
-                    title: Text(
-                      data['title'] ?? '',
-                      style: const TextStyle(
-                        color: textColorPrimary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    subtitle: Column(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(height: 6),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                data['title'] ?? '',
+                                style: const TextStyle(
+                                  color: textColorPrimary,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              icon: const Icon(
+                                Icons.delete_outline,
+                                color: Colors.redAccent,
+                                size: 22,
+                              ),
+                              onPressed: () => _deleteEntry(doc.id),
+                            ),
+                          ],
+                        ),
+
+                        // Image (if any)
+                        if (data['photoUrl'] != null)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              data['photoUrl'],
+                              height: 180,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+
+                        if (data['photoUrl'] != null)
+                          const SizedBox(height: 12),
+
+                        // Journal content
                         Text(
                           data['content'] ?? '',
-                          style: const TextStyle(color: textColorSecondary),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 8),
-                        if (data['photoUrl'] != null)
-                          Image.network(
-                            data['photoUrl'],
-                            height: 150,
-                            fit: BoxFit.cover,
-                          ),
-                        const SizedBox(height: 6),
-                        Text(
-                          'Date: $formattedDate',
                           style: const TextStyle(
                             color: textColorSecondary,
-                            fontSize: 12,
+                            fontSize: 15,
+                            height: 1.5,
                           ),
+                          maxLines: 3,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+
+                        if ((data['content'] ?? '').isNotEmpty)
+                          const SizedBox(height: 12),
+
+                        // Date
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Icon(
+                              Icons.calendar_today,
+                              size: 14,
+                              color: textColorSecondary.withOpacity(0.8),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              formattedDate,
+                              style: TextStyle(
+                                color: textColorSecondary.withOpacity(0.9),
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
-                    ),
-                    onTap: () => _showJournalDialog(doc),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete, color: textColorSecondary),
-                      onPressed: () => _deleteEntry(doc.id),
                     ),
                   ),
                 ),

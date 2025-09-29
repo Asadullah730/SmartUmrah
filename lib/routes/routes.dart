@@ -9,13 +9,14 @@ import 'package:smart_umrah_app/screens/User/UserFeatures/offline_guide_access.d
 import 'package:smart_umrah_app/screens/User/UserFeatures/rule.dart';
 import 'package:smart_umrah_app/screens/User/UserFeatures/track_expenses.dart';
 import 'package:smart_umrah_app/screens/User/UserFeatures/transport_routes.dart';
+import 'package:smart_umrah_app/screens/User/UserFeatures/view_places.dart';
 import 'package:smart_umrah_app/screens/User/UserFeatures/view_travel_agent.dart';
 import 'package:smart_umrah_app/screens/User/auth_pages/forgot_password_screen.dart';
 import 'package:smart_umrah_app/screens/User/auth_pages/userSignIn.dart';
 import 'package:smart_umrah_app/screens/User/auth_pages/userSignupScreen.dart';
 import 'package:smart_umrah_app/screens/landing_screen.dart';
 import 'package:smart_umrah_app/screens/User/UserFeatures/travel_checklist_screen.dart';
-import 'package:smart_umrah_app/screens/User/UserFeatures/umrah_guide_screen.dart';
+import 'package:smart_umrah_app/screens/User/UserFeatures/UmrahGuide/umrah_guide_screen.dart';
 import 'package:smart_umrah_app/screens/User/UserFeatures/umrah_journal_screen.dart';
 
 class AppRoutes {
@@ -59,7 +60,7 @@ class AppRoutes {
     GetPage(name: transportroutes, page: () => TransportRoutes()),
     GetPage(name: trackexpenses, page: () => TrackExpenses()),
     GetPage(name: tawafsaicounter, page: () => TawafSaiCounter()),
-    GetPage(name: viewplaces, page: () => TransportRoutes()),
+    GetPage(name: viewplaces, page: () => ViewPlacesScreen()),
     GetPage(name: usernotification, page: () => Notification()),
     GetPage(name: userofflineaccess, page: () => OfflineGuideAccess()),
     GetPage(name: viewtravelagent, page: () => ViewTravelAgent()),

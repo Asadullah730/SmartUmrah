@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -12,14 +11,14 @@ class SupabaseService {
           '${DateTime.now().millisecondsSinceEpoch}_${imageFile.path.split('/').last}';
 
       final response = await supabase.storage
-          .from('profile-pics')
+          .from('umrahJournals')
           .upload(fileName, imageFile);
 
       print("PICTURE RESPONSE : ${response}");
 
       if (response.isNotEmpty) {
         final publicUrl = supabase.storage
-            .from('profile-pics')
+            .from('umrahJournals')
             .getPublicUrl(fileName);
 
         Get.snackbar("IMAGE RESULT", "IMAGE UPLOAD SUCCESSFULLY");

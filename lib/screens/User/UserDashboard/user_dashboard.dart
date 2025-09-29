@@ -1,25 +1,22 @@
-// lib/screens/user_dashboard.dart
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/DataLayer/UserData/user_features.dart';
 import 'package:smart_umrah_app/Services/firebaseServices/AuthServices/logout.dart';
-import '../UserFeatures/UmrahGuide/umrah_guide_screen.dart';
 import '../UserFeatures/umrah_journal_screen.dart';
-import '../UserFeatures/travel_checklist_screen.dart';
 
-class UserDashboard extends StatefulWidget {
-  const UserDashboard({super.key});
+class UserDashboardController extends GetxController {
+  var selectedIndex = 0.obs;
 
-  @override
-  State<UserDashboard> createState() => _UserDashboardState();
+  void changeTab(int index) {
+    selectedIndex.value = index;
+  }
 }
 
-class _UserDashboardState extends State<UserDashboard> {
-  int _selectedIndex = 0;
+class UserDashboard extends StatelessWidget {
+  UserDashboard({super.key});
 
-  // Colors
+  final UserDashboardController controller = Get.put(UserDashboardController());
+
   static const Color primaryBackgroundColor = Color(0xFF1E2A38);
   static const Color cardBackgroundColor = Color(0xFF283645);
   static const Color textColorPrimary = Colors.white;
@@ -29,19 +26,11 @@ class _UserDashboardState extends State<UserDashboard> {
   static const Color navBarSelectedItemColor = accentColor;
   static const Color navBarUnselectedItemColor = Colors.white54;
 
-  void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
-  Widget _buildHomeContent() {
+  Widget _buildHomeContent(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-
-    // Adjust grid column count based on width
     int crossAxisCount = 2;
-    if (screenWidth > 600) crossAxisCount = 3; // Tablet
-    if (screenWidth > 900) crossAxisCount = 4; // Desktop
+    if (screenWidth > 600) crossAxisCount = 3;
+    if (screenWidth > 900) crossAxisCount = 4;
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
@@ -94,7 +83,7 @@ class _UserDashboardState extends State<UserDashboard> {
     );
   }
 
-  Widget _buildJournalContent() {
+  Widget _buildJournalContent(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Center(
@@ -131,12 +120,7 @@ class _UserDashboardState extends State<UserDashboard> {
               const SizedBox(height: 30),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const UmrahJournalScreen(),
-                    ),
-                  );
+                  Get.to(() => UmrahJournalScreen());
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: accentColor,
@@ -158,7 +142,7 @@ class _UserDashboardState extends State<UserDashboard> {
     );
   }
 
-  Widget _buildSettingsContent() {
+  Widget _buildSettingsContent(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
 
     return Center(
@@ -283,37 +267,39 @@ class _UserDashboardState extends State<UserDashboard> {
         actions: [
           IconButton(
             icon: const Icon(Icons.logout, color: textColorPrimary),
-            onPressed: () async {
-              await logoutUser();
-            },
+            onPressed: () async => await logoutUser(),
             tooltip: 'Logout',
           ),
         ],
       ),
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: [
-          _buildHomeContent(),
-          _buildJournalContent(),
-          _buildSettingsContent(),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Journal'),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: navBarSelectedItemColor,
-        unselectedItemColor: navBarUnselectedItemColor,
-        backgroundColor: navBarColor,
-        onTap: _onItemTapped,
-        type: BottomNavigationBarType.fixed,
-      ),
+      body: Obx(() {
+        return IndexedStack(
+          index: controller.selectedIndex.value,
+          children: [
+            _buildHomeContent(context),
+            _buildJournalContent(context),
+            _buildSettingsContent(context),
+          ],
+        );
+      }),
+      bottomNavigationBar: Obx(() {
+        return BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Journal'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
+          currentIndex: controller.selectedIndex.value,
+          selectedItemColor: navBarSelectedItemColor,
+          unselectedItemColor: navBarUnselectedItemColor,
+          backgroundColor: navBarColor,
+          onTap: controller.changeTab,
+          type: BottomNavigationBarType.fixed,
+        );
+      }),
     );
   }
 }

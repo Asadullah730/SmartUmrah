@@ -51,44 +51,47 @@ class TawafSaiCounter extends StatelessWidget {
               ),
               const SizedBox(height: 50),
 
-              // Counter Display with animation
+              // Counter (tap to increment)
               Obx(
-                () => AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 300),
-                  transitionBuilder: (child, anim) =>
-                      ScaleTransition(scale: anim, child: child),
-                  child: Card(
-                    key: ValueKey(controller.count.value),
-                    color: Colors.white.withOpacity(0.15),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
-                    ),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 60,
-                        vertical: 35,
-                      ),
-                      decoration: BoxDecoration(
+                () => GestureDetector(
+                  onTap: controller.increment,
+                  child: AnimatedSwitcher(
+                    duration: const Duration(milliseconds: 300),
+                    transitionBuilder: (child, anim) =>
+                        ScaleTransition(scale: anim, child: child),
+                    child: Card(
+                      key: ValueKey(controller.count.value),
+                      color: Colors.white.withOpacity(0.15),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(25),
-                        border: Border.all(
-                          color: Colors.white.withOpacity(0.4),
-                          width: 1.5,
-                        ),
                       ),
-                      child: Text(
-                        "${controller.count}",
-                        style: const TextStyle(
-                          fontSize: 64,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              offset: Offset(2, 2),
-                              blurRadius: 6,
-                              color: Colors.black38,
-                            ),
-                          ],
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 60,
+                          vertical: 35,
+                        ),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.4),
+                            width: 1.5,
+                          ),
+                        ),
+                        child: Text(
+                          "${controller.count}",
+                          style: const TextStyle(
+                            fontSize: 64,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(2, 2),
+                                blurRadius: 6,
+                                color: Colors.black38,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -96,23 +99,6 @@ class TawafSaiCounter extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 50),
-
-              // Buttons row
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildRoundButton(
-                    icon: Icons.remove,
-                    onTap: controller.decrement,
-                  ),
-                  const SizedBox(width: 25),
-                  _buildRoundButton(
-                    icon: Icons.add,
-                    onTap: controller.increment,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 35),
 
               // Reset Button
               ElevatedButton.icon(
@@ -140,24 +126,6 @@ class TawafSaiCounter extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildRoundButton({
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    return ElevatedButton(
-      onPressed: onTap,
-      style: ElevatedButton.styleFrom(
-        shape: const CircleBorder(),
-        backgroundColor: Colors.white,
-        foregroundColor: const Color(0xFF1E3A8A),
-        padding: const EdgeInsets.all(22),
-        elevation: 8,
-        shadowColor: Colors.black38,
-      ),
-      child: Icon(icon, size: 32),
     );
   }
 }

@@ -56,7 +56,7 @@ class AppRoutes {
     GetPage(name: travelchecklist, page: () => TravelChecklistScreen()),
     GetPage(name: umrahjournal, page: () => UmrahJournalScreen()),
     GetPage(name: umrahrules, page: () => UmrahRulesScreen()),
-    GetPage(name: managedoc, page: () => ManageDocs()),
+    GetPage(name: managedoc, page: () => ManageDocScreen()),
     GetPage(name: transportroutes, page: () => TransportRoutes()),
     GetPage(name: trackexpenses, page: () => TrackExpenses()),
     GetPage(name: tawafsaicounter, page: () => TawafSaiCounter()),

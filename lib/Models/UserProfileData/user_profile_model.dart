@@ -7,6 +7,7 @@ class UserProfileModel {
   final String? gender;
   final String? dateOfBirth;
   final String? passportNumber;
+  final double? expenses;
   final bool isUser;
 
   UserProfileModel({
@@ -18,10 +19,10 @@ class UserProfileModel {
     this.gender,
     this.dateOfBirth,
     this.passportNumber,
-    this.isUser = true, // default true if you want
+    this.expenses,
+    this.isUser = true,
   });
 
-  // Convert model → Firebase (Map)
   Map<String, dynamic> toFirebase() {
     return {
       'id': id,
@@ -32,6 +33,7 @@ class UserProfileModel {
       'gender': gender,
       'dateOfBirth': dateOfBirth,
       'passportNumber': passportNumber,
+      'expenses': expenses,
       'isUser': isUser,
     };
   }
@@ -47,6 +49,9 @@ class UserProfileModel {
       gender: data['gender'],
       dateOfBirth: data['dateOfBirth'],
       passportNumber: data['passportNumber'],
+      expenses: (data['expenses'] != null)
+          ? double.tryParse(data['expenses'].toString())
+          : null,
       isUser: data['isUser'] ?? true,
     );
   }

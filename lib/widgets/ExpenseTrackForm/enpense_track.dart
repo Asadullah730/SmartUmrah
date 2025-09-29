@@ -1,155 +1,109 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/Controller/expense_track_controller.dart';
+import 'package:smart_umrah_app/Models/ExpensesModel_expenses_model.dart';
 
 final _formKey = GlobalKey<FormState>();
 final TextEditingController _itemController = TextEditingController();
 final TextEditingController _placeController = TextEditingController();
 final TextEditingController _amountController = TextEditingController();
 final ExpenseController expenseController = Get.put(ExpenseController());
+
 void showAddExpenseDialog(BuildContext context) {
-  Get.dialog(
-    AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      title: const Text(
-        "Add Expense",
-        style: TextStyle(fontWeight: FontWeight.bold),
+  _itemController.clear();
+  _placeController.clear();
+  _amountController.clear();
+
+  Get.defaultDialog(
+    title: "Add Expense",
+    content: Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _itemController,
+            decoration: const InputDecoration(labelText: "Item"),
+            validator: (value) => value!.isEmpty ? "Enter item" : null,
+          ),
+          TextFormField(
+            controller: _placeController,
+            decoration: const InputDecoration(labelText: "Place"),
+            validator: (value) => value!.isEmpty ? "Enter place" : null,
+          ),
+          TextFormField(
+            controller: _amountController,
+            decoration: const InputDecoration(labelText: "Amount"),
+            keyboardType: TextInputType.number,
+            validator: (value) => value!.isEmpty ? "Enter amount" : null,
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                final expense = Expense(
+                  item: _itemController.text,
+                  place: _placeController.text,
+                  amount: double.parse(_amountController.text),
+                  date: DateTime.now(),
+                );
+                await expenseController.addExpense(expense);
+                Get.back();
+              }
+            },
+            child: const Text("Add"),
+          ),
+        ],
       ),
-      content: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              controller: _itemController,
-              decoration: const InputDecoration(
-                labelText: "Item (e.g., Tasbeeh)",
-                prefixIcon: Icon(Icons.shopping_bag),
-              ),
-              validator: (value) => value!.isEmpty ? "Enter item name" : null,
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _placeController,
-              decoration: const InputDecoration(
-                labelText: "Place (e.g., Madinah)",
-                prefixIcon: Icon(Icons.location_on),
-              ),
-              validator: (value) => value!.isEmpty ? "Enter place" : null,
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _amountController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: "Amount (SAR)",
-                prefixIcon: Icon(Icons.attach_money),
-              ),
-              validator: (value) => value!.isEmpty ? "Enter amount" : null,
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(onPressed: () => Get.back(), child: const Text("Cancel")),
-        ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              expenseController.addExpense(
-                _itemController.text,
-                _placeController.text,
-                double.parse(_amountController.text),
-              );
-              _itemController.clear();
-              _placeController.clear();
-              _amountController.clear();
-              Get.back();
-            }
-          },
-          child: const Text("Add"),
-        ),
-      ],
     ),
   );
 }
 
-void showEditExpenseDialog(
-  BuildContext context,
-  int index,
-  Map<String, dynamic> expense,
-) {
-  final TextEditingController _itemController = TextEditingController(
-    text: expense["item"],
-  );
-  final TextEditingController _placeController = TextEditingController(
-    text: expense["place"],
-  );
-  final TextEditingController _amountController = TextEditingController(
-    text: expense["amount"].toString(),
-  );
+void showEditExpenseDialog(BuildContext context, Expense expense) {
+  _itemController.text = expense.item;
+  _placeController.text = expense.place;
+  _amountController.text = expense.amount.toString();
 
-  final _formKey = GlobalKey<FormState>();
-  final ExpenseController expenseController = Get.find();
-
-  Get.dialog(
-    AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      title: const Text(
-        "Edit Expense",
-        style: TextStyle(fontWeight: FontWeight.bold),
+  Get.defaultDialog(
+    title: "Edit Expense",
+    content: Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            controller: _itemController,
+            decoration: const InputDecoration(labelText: "Item"),
+            validator: (value) => value!.isEmpty ? "Enter item" : null,
+          ),
+          TextFormField(
+            controller: _placeController,
+            decoration: const InputDecoration(labelText: "Place"),
+            validator: (value) => value!.isEmpty ? "Enter place" : null,
+          ),
+          TextFormField(
+            controller: _amountController,
+            decoration: const InputDecoration(labelText: "Amount"),
+            keyboardType: TextInputType.number,
+            validator: (value) => value!.isEmpty ? "Enter amount" : null,
+          ),
+          const SizedBox(height: 16),
+          ElevatedButton(
+            onPressed: () async {
+              if (_formKey.currentState!.validate()) {
+                final updatedExpense = Expense(
+                  id: expense.id,
+                  item: _itemController.text,
+                  place: _placeController.text,
+                  amount: double.parse(_amountController.text),
+                  date: DateTime.now(),
+                );
+                await expenseController.editExpense(updatedExpense);
+                Get.back();
+              }
+            },
+            child: const Text("Update"),
+          ),
+        ],
       ),
-      content: Form(
-        key: _formKey,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextFormField(
-              controller: _itemController,
-              decoration: const InputDecoration(
-                labelText: "Item",
-                prefixIcon: Icon(Icons.shopping_bag),
-              ),
-              validator: (value) => value!.isEmpty ? "Enter item name" : null,
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _placeController,
-              decoration: const InputDecoration(
-                labelText: "Place",
-                prefixIcon: Icon(Icons.location_on),
-              ),
-              validator: (value) => value!.isEmpty ? "Enter place" : null,
-            ),
-            const SizedBox(height: 10),
-            TextFormField(
-              controller: _amountController,
-              keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: "Amount (SAR)",
-                prefixIcon: Icon(Icons.attach_money),
-              ),
-              validator: (value) => value!.isEmpty ? "Enter amount" : null,
-            ),
-          ],
-        ),
-      ),
-      actions: [
-        TextButton(onPressed: () => Get.back(), child: const Text("Cancel")),
-        ElevatedButton(
-          onPressed: () {
-            if (_formKey.currentState!.validate()) {
-              expenseController.editExpense(
-                index,
-                _itemController.text,
-                _placeController.text,
-                double.parse(_amountController.text),
-              );
-              Get.back();
-            }
-          },
-          child: const Text("Save"),
-        ),
-      ],
     ),
   );
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class SupabaseService {
+class SupabaseJournalImgService {
   final supabase = Supabase.instance.client;
 
-  Future<String?> uploadImageToSupabase(imageFile) async {
+  Future<String?> uploadJournalImageToSupabase(imageFile) async {
     try {
       final fileName =
           '${DateTime.now().millisecondsSinceEpoch}_${imageFile.path.split('/').last}';

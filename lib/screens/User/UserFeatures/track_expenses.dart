@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:smart_umrah_app/Controller/expense_track_controller.dart';
+import 'package:smart_umrah_app/Models/ExpensesModel_expenses_model.dart';
 import 'package:smart_umrah_app/widgets/ExpenseTrackForm/enpense_track.dart';
 
 class TrackExpenses extends StatelessWidget {
@@ -12,7 +14,6 @@ class TrackExpenses extends StatelessWidget {
   final TextEditingController _itemController = TextEditingController();
   final TextEditingController _placeController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,6 +23,7 @@ class TrackExpenses extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+        foregroundColor: Colors.white,
         backgroundColor: Colors.teal,
         elevation: 6,
       ),
@@ -37,140 +39,140 @@ class TrackExpenses extends StatelessWidget {
           children: [
             Expanded(
               child: Obx(() {
-                return expenseController.expenses.isEmpty
-                    ? const Center(
-                        child: Text(
-                          "No expenses added yet",
-                          style: TextStyle(fontSize: 16, color: Colors.grey),
-                        ),
-                      )
-                    : ListView.builder(
-                        padding: const EdgeInsets.all(16),
-                        itemCount: expenseController.expenses.length,
-                        itemBuilder: (context, index) {
-                          final expense = expenseController.expenses[index];
-                          return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 8),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.15),
-                                  spreadRadius: 2,
-                                  blurRadius: 6,
-                                  offset: const Offset(0, 3),
+                if (expenseController.expenses.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      "No expenses added yet",
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
+                    ),
+                  );
+                }
+
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Determine number of columns based on screen width
+                    int crossAxisCount = 1;
+                    double width = constraints.maxWidth;
+                    if (width >= 600 && width < 900) crossAxisCount = 2;
+                    if (width >= 900) crossAxisCount = 3;
+
+                    return GridView.builder(
+                      padding: const EdgeInsets.all(16),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        crossAxisSpacing: 16,
+                        mainAxisSpacing: 16,
+                        childAspectRatio: 3, // Width-to-height ratio for cards
+                      ),
+                      itemCount: expenseController.expenses.length,
+                      itemBuilder: (context, index) {
+                        final expense = expenseController.expenses[index];
+                        return Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.15),
+                                spreadRadius: 2,
+                                blurRadius: 6,
+                                offset: const Offset(0, 3),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.all(10),
+                                decoration: BoxDecoration(
+                                  color: Colors.teal.withOpacity(0.1),
+                                  shape: BoxShape.circle,
                                 ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(14.0),
-                              child: Row(
+                                child: const Icon(
+                                  Icons.receipt_long,
+                                  color: Colors.teal,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      expense.item,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      expense.place,
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    Text(
+                                      DateFormat(
+                                        "dd MMM yyyy",
+                                      ).format(expense.date),
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  // Left Icon
-                                  Container(
-                                    padding: const EdgeInsets.all(10),
-                                    decoration: BoxDecoration(
-                                      color: Colors.teal.withOpacity(0.1),
-                                      shape: BoxShape.circle,
-                                    ),
-                                    child: const Icon(
-                                      Icons.receipt_long,
+                                  Text(
+                                    "${expense.amount.toStringAsFixed(2)} SAR",
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold,
                                       color: Colors.teal,
-                                      size: 28,
                                     ),
                                   ),
-                                  const SizedBox(width: 12),
-
-                                  // Middle Texts
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          expense["item"],
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.black87,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          expense["place"],
-                                          style: const TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 2),
-                                        Text(
-                                          expense["date"],
-                                          style: const TextStyle(
-                                            fontSize: 12,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-
-                                  // Right Price + Actions
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(
-                                        "${expense["amount"]} SAR",
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.teal,
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.edit,
+                                          color: Colors.blue,
+                                          size: 22,
+                                        ),
+                                        onPressed: () => showEditExpenseDialog(
+                                          context,
+                                          expense,
                                         ),
                                       ),
-                                      Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.edit,
-                                              color: Colors.blue,
-                                              size: 22,
-                                            ),
-                                            onPressed: () {
-                                              showEditExpenseDialog(
-                                                context,
-                                                index,
-                                                expense,
-                                              );
-                                            },
-                                          ),
-                                          IconButton(
-                                            icon: const Icon(
-                                              Icons.delete,
-                                              color: Colors.red,
-                                              size: 22,
-                                            ),
-                                            onPressed: () {
-                                              expenseController.deleteExpense(
-                                                index,
-                                              );
-                                            },
-                                          ),
-                                        ],
+                                      IconButton(
+                                        icon: const Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                          size: 22,
+                                        ),
+                                        onPressed: () => expenseController
+                                            .deleteExpense(expense.id!),
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                            ),
-                          );
-                        },
-                      );
+                            ],
+                          ),
+                        );
+                      },
+                    );
+                  },
+                );
               }),
             ),
 
-            // Add Expense Button (fixed above total)
+            // Add Expense Button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: SizedBox(
@@ -219,7 +221,7 @@ class TrackExpenses extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "${expenseController.totalExpense.toStringAsFixed(2)} SAR",
+                      "${expenseController.totalExpense.value.toStringAsFixed(2)} SAR",
                       style: const TextStyle(
                         fontSize: 20,
                         color: Colors.amber,

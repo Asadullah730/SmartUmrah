@@ -155,8 +155,6 @@ class _TravelChecklistScreenState extends State<TravelChecklistScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Check and initialize items only once when the widget is built.
-    // This is a simple solution to ensure the items are added.
     _initializePredefinedItems();
 
     return Scaffold(

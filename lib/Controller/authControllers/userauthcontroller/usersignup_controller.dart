@@ -2,10 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_umrah_app/Screens/emailVarification.dart';
+import 'package:smart_umrah_app/screens/User/auth_pages/email_verification.dart';
 
 class SignupController extends GetxController {
-  RxBool _isLoading = false.obs;
+  final RxBool _isLoading = false.obs;
   Future<void> signUpUser(
     BuildContext context, {
     required String email,

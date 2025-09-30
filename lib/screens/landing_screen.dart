@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/routes/routes.dart';
-import 'package:smart_umrah_app/screens/travel_agent/travel_agent_login_screen.dart';
 
 class LandingScreen extends StatelessWidget {
   const LandingScreen({super.key});
@@ -14,90 +13,104 @@ class LandingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenHeight = MediaQuery.of(context).size.height;
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: primaryBackgroundColor,
       body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 32.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/umrah_app_logo.png',
-                  height: 150,
-                  width: 150,
-                ),
-                const SizedBox(height: 40),
-                Text(
-                  "Smart Umrah Application",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 32,
-                    fontWeight: FontWeight.bold,
-                    color: titleTextColor,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  "Your companion for a blessed journey.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 16, color: textColorSecondary),
-                ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // App Logo
+              Image.asset(
+                'assets/umrah_app_logo.png',
+                height: screenHeight * 0.18,
+                width: screenHeight * 0.18,
+                fit: BoxFit.contain,
+              ),
+              SizedBox(height: screenHeight * 0.04),
 
-                const SizedBox(height: 60),
+              // App Title
+              Text(
+                "Smart Umrah Application",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: screenHeight * 0.035,
+                  fontWeight: FontWeight.bold,
+                  color: titleTextColor,
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.01),
 
-                // User Login Button
-                ElevatedButton(
+              // Subtitle
+              Text(
+                "Your companion for a blessed journey.",
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: screenHeight * 0.02,
+                  color: textColorSecondary,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.08),
+
+              // User Login Button
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
                   onPressed: () => Get.toNamed(AppRoutes.usersignin),
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 56),
                     backgroundColor: accentColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    elevation: 4,
+                    shadowColor: Colors.black26,
                   ),
-                  child: const Text(
+                  child: Text(
                     "User Login",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: screenHeight * 0.022,
                       fontWeight: FontWeight.bold,
                       color: textColorPrimary,
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
+              ),
+              SizedBox(height: screenHeight * 0.025),
+
+              // Travel Agent Button
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TravelAgentLoginScreen(),
-                      ),
-                    );
+                    Get.back();
+                    Get.toNamed(AppRoutes.agentsignin);
                   },
                   style: ElevatedButton.styleFrom(
-                    minimumSize: const Size(double.infinity, 56),
                     backgroundColor: accentColor,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    elevation: 0,
-                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    elevation: 4,
+                    shadowColor: Colors.black26,
                   ),
-                  child: const Text(
+                  child: Text(
                     "Travel Agent",
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: screenHeight * 0.022,
                       fontWeight: FontWeight.bold,
                       color: textColorPrimary,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

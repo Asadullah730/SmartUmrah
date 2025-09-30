@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_umrah_app/Controller/authControllers/userauthcontroller/usersignin_controller.dart';
+import 'package:smart_umrah_app/Controller/authControllers/agentAuthController/agentsignin_controller.dart';
 import 'package:smart_umrah_app/routes/routes.dart';
 import 'package:smart_umrah_app/validation/auth_validation.dart';
 import 'package:smart_umrah_app/widgets/customButton.dart';
 import 'package:smart_umrah_app/widgets/customtextfield.dart';
 
-class UserSignInScreen extends StatelessWidget {
-  UserSignInScreen({super.key});
+class AgentSignInScreen extends StatelessWidget {
+  AgentSignInScreen({super.key});
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -16,7 +16,7 @@ class UserSignInScreen extends StatelessWidget {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  SigninController _signincontroller = Get.put(SigninController());
+  AgentSigninController _signincontroller = Get.put(AgentSigninController());
 
   @override
   Widget build(BuildContext context) {
@@ -115,8 +115,7 @@ class UserSignInScreen extends StatelessWidget {
                             Get.toNamed(AppRoutes.admindashboard);
                             return;
                           }
-                          _signincontroller
-                              .loginUser(
+                          _signincontroller.AgentloginUser(
                                 _emailController.text.trim(),
                                 _passwordController.text.trim(),
                                 context,
@@ -146,7 +145,7 @@ class UserSignInScreen extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       Navigator.pop(context);
-                      Get.toNamed(AppRoutes.userregister);
+                      Get.toNamed(AppRoutes.agentregister);
                     },
                     child: const Text(
                       "REGISTER",

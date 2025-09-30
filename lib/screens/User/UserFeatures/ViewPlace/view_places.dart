@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:smart_umrah_app/DataLayer/ViewPlaces/places.dart';
+import 'package:smart_umrah_app/DataLayer/User/ViewPlaces/places.dart';
 
 class ViewPlaceScreen extends StatefulWidget {
   const ViewPlaceScreen({super.key});

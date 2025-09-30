@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smart_umrah_app/DataLayer/userUmrahGuide/umrah_guide.dart';
+import 'package:smart_umrah_app/DataLayer/User/userUmrahGuide/umrah_guide.dart';
 
 class TextGuideTab extends StatelessWidget {
   const TextGuideTab();

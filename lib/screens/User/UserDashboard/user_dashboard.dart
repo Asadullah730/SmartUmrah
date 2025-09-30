@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_umrah_app/DataLayer/UserData/user_features.dart';
+import 'package:smart_umrah_app/DataLayer/User/UserData/user_features.dart';
 import 'package:smart_umrah_app/Services/firebaseServices/AuthServices/logout.dart';
 import '../UserFeatures/umrah_journal_screen.dart';
 

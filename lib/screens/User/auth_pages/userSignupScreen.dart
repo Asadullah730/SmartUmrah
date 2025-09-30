@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_umrah_app/ColorTheme/color_theme.dart';
-import 'package:smart_umrah_app/Controller/authcontroller/usersignup_controller.dart';
-import 'package:smart_umrah_app/DataLayer/UserData/userSignup_data.dart';
+import 'package:smart_umrah_app/Controller/authControllers/userauthcontroller/usersignup_controller.dart';
+import 'package:smart_umrah_app/DataLayer/User/UserData/userSignup_data.dart';
 import 'package:smart_umrah_app/Models/UserProfileData/user_profile_model.dart';
-import 'package:smart_umrah_app/Services/firebaseServices/firebaseDatabase/NewProfileData/new_profile_data_collection.dart';
+import 'package:smart_umrah_app/Services/firebaseServices/firebaseDatabase/UserProfileData/newUser_profile_data_collection.dart';
 import 'package:smart_umrah_app/getUserId/getUid.dart';
 import 'package:smart_umrah_app/routes/routes.dart';
 import 'package:smart_umrah_app/screens/User/auth_pages/email_verification.dart';

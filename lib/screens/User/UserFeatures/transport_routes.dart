@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smart_umrah_app/ColorTheme/color_theme.dart';
-import 'package:smart_umrah_app/DataLayer/ZiaratRoutes/ziarat_routes.dart';
+import 'package:smart_umrah_app/DataLayer/User/ZiaratRoutes/ziarat_routes.dart';
 
 class TransportRoutes extends StatelessWidget {
   const TransportRoutes({super.key});

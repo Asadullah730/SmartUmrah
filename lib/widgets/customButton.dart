@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
+// ignore: non_constant_identifier_names
 Container CustomButton({
   required String text,
   required VoidCallback onPressed,
   Color backgroundColor = Colors.blue,
   double width = double.infinity,
-  double height = 50.0,
+  double height = 60.0,
   bool isLoading = false,
 }) {
   return Container(

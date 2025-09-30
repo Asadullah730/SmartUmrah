@@ -7,6 +7,7 @@ class UserProfileModel {
   final String? gender;
   final String? dateOfBirth;
   final String? passportNumber;
+  final String? agencyName; // New field for agency name for travel agents
   final double? expenses;
   final bool isUser;
 
@@ -19,6 +20,7 @@ class UserProfileModel {
     this.gender,
     this.dateOfBirth,
     this.passportNumber,
+    this.agencyName, // New field for agency name for travel agents
     this.expenses,
     this.isUser = true,
   });
@@ -33,6 +35,7 @@ class UserProfileModel {
       'gender': gender,
       'dateOfBirth': dateOfBirth,
       'passportNumber': passportNumber,
+      'agencyName': agencyName, // Include agency name in the map
       'expenses': expenses,
       'isUser': isUser,
     };
@@ -49,6 +52,7 @@ class UserProfileModel {
       gender: data['gender'],
       dateOfBirth: data['dateOfBirth'],
       passportNumber: data['passportNumber'],
+      agencyName: data['agencyName'], // Retrieve agency name from the map
       expenses: (data['expenses'] != null)
           ? double.tryParse(data['expenses'].toString())
           : null,

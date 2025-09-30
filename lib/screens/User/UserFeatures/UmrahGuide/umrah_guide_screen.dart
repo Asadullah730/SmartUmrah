@@ -1,6 +1,6 @@
 // lib/screens/user/umrah_guide_screen.dart
 import 'package:flutter/material.dart';
-import 'package:smart_umrah_app/DataLayer/userUmrahGuide/umrah_guide.dart';
+import 'package:smart_umrah_app/DataLayer/User/userUmrahGuide/umrah_guide.dart';
 import 'package:smart_umrah_app/screens/User/UserFeatures/UmrahGuide/dua_tab.dart';
 import 'package:smart_umrah_app/screens/User/UserFeatures/UmrahGuide/text_guide.dart';
 import 'package:smart_umrah_app/screens/User/UserFeatures/UmrahGuide/vedio_tab.dart';

@@ -1,23 +1,24 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:smart_umrah_app/screens/user_login_screen.dart';
+import 'package:smart_umrah_app/routes/routes.dart';
 
-class EmailVerificationScreen extends StatefulWidget {
+class AgentEmailVerificationScreen extends StatefulWidget {
   final String? emailAddress;
-  EmailVerificationScreen({Key? key, required this.emailAddress})
+  AgentEmailVerificationScreen({Key? key, required this.emailAddress})
     : super(key: key);
 
   @override
-  _EmailVerificationScreenState createState() =>
-      _EmailVerificationScreenState();
+  _AgentEmailVerificationScreenState createState() =>
+      _AgentEmailVerificationScreenState();
 }
 
-class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
+class _AgentEmailVerificationScreenState
+    extends State<AgentEmailVerificationScreen> {
   late Timer _verificationCheckTimer;
   late Timer _resendCooldownTimer;
   int _remainingTime = 60;
@@ -93,16 +94,18 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
       await user?.reload();
 
       if (user?.emailVerified ?? false) {
+        // Cancel timers
         _verificationCheckTimer.cancel();
         _resendCooldownTimer.cancel();
+
+        // Save verification state
         final prefs = await SharedPreferences.getInstance();
         await prefs.setBool('isEmailVerified', true);
         await prefs.setString('userEmail', user?.email ?? '');
+
+        // Navigate to home screen
         Navigator.pop(context);
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SignInScreen()),
-        );
+        Get.toNamed(AppRoutes.agentsignin);
       }
     } catch (e) {
       print('Error checking email verification: $e');
@@ -131,6 +134,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Animated Email Verification Lottie Animation
               Lottie.asset(
                 'assets/emailverify.json',
                 height: 200,
@@ -162,6 +166,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
               const SizedBox(height: 30),
 
+              // Circular Countdown Timer
               CircularPercentIndicator(
                 radius: 60.0,
                 lineWidth: 10.0,
@@ -179,6 +184,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
 
               const SizedBox(height: 20),
 
+              // Resend Email Button
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -225,10 +231,7 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignInScreen()),
-                  );
+                  Get.toNamed(AppRoutes.agentsignin);
                 },
                 child: Text(
                   'Wrong email? Go back to Login',

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/ColorTheme/color_theme.dart';
-import 'package:smart_umrah_app/DataLayer/Rulesandregulation/rules_regulation.dart';
+import 'package:smart_umrah_app/DataLayer/User/Rulesandregulation/rules_regulation.dart';
 
 class UmrahRulesScreen extends StatelessWidget {
   const UmrahRulesScreen({super.key});

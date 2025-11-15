@@ -17,14 +17,14 @@ class ManageDocController extends GetxController {
   Rx<File?> imageFile = Rx<File?>(null);
 
   final SupabaseDocImageService _supabaseService = SupabaseDocImageService();
-  CollectionReference<Map<String, dynamic>>? journalCollection;
+  CollectionReference<Map<String, dynamic>>? documentCollection;
 
   @override
   void onInit() {
     super.onInit();
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      journalCollection = FirebaseFirestore.instance
+      documentCollection = FirebaseFirestore.instance
           .collection('manage-documents')
           .doc(user.uid)
           .collection('entries');
@@ -33,8 +33,8 @@ class ManageDocController extends GetxController {
   }
 
   void fetchDocuments() {
-    if (journalCollection == null) return;
-    journalCollection!.orderBy('date', descending: true).snapshots().listen((
+    if (documentCollection == null) return;
+    documentCollection!.orderBy('date', descending: true).snapshots().listen((
       snapshot,
     ) {
       documents.value = snapshot.docs;
@@ -61,7 +61,7 @@ class ManageDocController extends GetxController {
 
   Future<void> deleteDocument(String docId) async {
     try {
-      await journalCollection?.doc(docId).delete();
+      await documentCollection?.doc(docId).delete();
       Get.snackbar('Deleted', 'Document removed successfully');
     } catch (e) {
       Get.snackbar('Error', 'Failed to delete: $e');
@@ -86,11 +86,11 @@ class ManageDocController extends GetxController {
 
     try {
       if (docId == null) {
-        await journalCollection?.add(data);
+        await documentCollection?.add(data);
         Get.back();
         Get.snackbar('Success', 'Document added successfully');
       } else {
-        await journalCollection?.doc(docId).update(data);
+        await documentCollection?.doc(docId).update(data);
         Get.back();
         Get.snackbar('Success', 'Document updated successfully');
       }

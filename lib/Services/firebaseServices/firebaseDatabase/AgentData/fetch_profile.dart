@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:smart_umrah_app/Models/UserProfileData/user_profile_model.dart';
+import 'package:smart_umrah_app/Models/TravelAgentProfileData/travelAgent_profile_model.dart';
 
-Future<UserProfileModel?> fetchAgentProfile() async {
+Future<TravelAgentProfileModel?> fetchAgentProfile() async {
   try {
     final String? userId = FirebaseAuth.instance.currentUser?.uid;
 
@@ -17,7 +17,7 @@ Future<UserProfileModel?> fetchAgentProfile() async {
         .get();
 
     if (doc.exists) {
-      return UserProfileModel.fromFirebase(doc.data()!);
+      return TravelAgentProfileModel.fromFirebase(doc.data()!);
     }
   } catch (e) {
     print('Error fetching profile: $e');
@@ -25,7 +25,7 @@ Future<UserProfileModel?> fetchAgentProfile() async {
   return null;
 }
 
-Future<List<UserProfileModel>> fetchAllAgentProfiles() async {
+Future<List<TravelAgentProfileModel>> fetchAllAgentProfiles() async {
   try {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('TravelAgents')
@@ -38,7 +38,7 @@ Future<List<UserProfileModel>> fetchAllAgentProfiles() async {
     print("Total profiles fetched: ${querySnapshot.docs.length}");
 
     return querySnapshot.docs
-        .map((doc) => UserProfileModel.fromFirebase(doc.data()))
+        .map((doc) => TravelAgentProfileModel.fromFirebase(doc.data()))
         .toList();
   } catch (e) {
     print('Error fetching all profiles: $e');

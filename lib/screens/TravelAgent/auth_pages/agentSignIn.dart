@@ -122,6 +122,7 @@ class AgentSignInScreen extends StatelessWidget {
                               )
                               .then((_) {
                                 _isLoading.value = false;
+                                Get.offNamed(AppRoutes.agentdashboard);
                               })
                               .catchError((error) {
                                 // Handle any errors that occur during login

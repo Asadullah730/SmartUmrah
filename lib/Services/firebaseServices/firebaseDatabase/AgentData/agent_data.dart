@@ -3,12 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_umrah_app/Models/UserProfileData/user_profile_model.dart';
+import 'package:smart_umrah_app/Models/TravelAgentProfileData/travelAgent_profile_model.dart';
 
 class AgentProfileDataCollection {
   final FirebaseFirestore database = FirebaseFirestore.instance;
 
-  Future<void> saveAgentProfileData(UserProfileModel user) async {
+  Future<void> saveAgentProfileData(TravelAgentProfileModel user) async {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;
       if (uid == null) {
@@ -18,9 +18,9 @@ class AgentProfileDataCollection {
 
       final docRef = database
           .collection("TravelAgents")
-          .withConverter<UserProfileModel>(
+          .withConverter<TravelAgentProfileModel>(
             fromFirestore: (snap, _) =>
-                UserProfileModel.fromFirebase(snap.data()!),
+                TravelAgentProfileModel.fromFirebase(snap.data()!),
             toFirestore: (usr, _) => usr.toFirebase(),
           )
           .doc(uid);
@@ -38,13 +38,13 @@ class AgentProfileDataCollection {
     }
   }
 
-  Future<UserProfileModel?> fetchAgentProfileData(String uid) async {
+  Future<TravelAgentProfileModel?> fetchAgentProfileData(String uid) async {
     try {
       final docRef = database
           .collection("TravelAgents")
-          .withConverter<UserProfileModel>(
+          .withConverter<TravelAgentProfileModel>(
             fromFirestore: (snap, _) =>
-                UserProfileModel.fromFirebase(snap.data()!),
+                TravelAgentProfileModel.fromFirebase(snap.data()!),
             toFirestore: (usr, _) => usr.toFirebase(),
           )
           .doc(uid);
@@ -63,7 +63,7 @@ class AgentProfileDataCollection {
     }
   }
 
-  Future<void> updateAgentProfileData(UserProfileModel user) async {
+  Future<void> updateAgentProfileData(TravelAgentProfileModel user) async {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;
       if (uid == null) {
@@ -72,9 +72,9 @@ class AgentProfileDataCollection {
 
       final docRef = database
           .collection("TravelAgents")
-          .withConverter<UserProfileModel>(
+          .withConverter<TravelAgentProfileModel>(
             fromFirestore: (snap, _) =>
-                UserProfileModel.fromFirebase(snap.data()!),
+                TravelAgentProfileModel.fromFirebase(snap.data()!),
             toFirestore: (usr, _) => usr.toFirebase(),
           )
           .doc(uid);

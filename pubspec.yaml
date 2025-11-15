@@ -61,8 +61,10 @@ dependencies:
   # Use for date formate
   intl: ^0.20.2
 
-  
+  # for youtube video player
   youtube_player_flutter: ^9.1.2
+
+  # for  google Map
   dropdown_search: ^6.0.2
   geocoding: ^4.0.0
   google_maps_flutter: ^2.13.1

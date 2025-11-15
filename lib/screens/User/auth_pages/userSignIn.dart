@@ -123,6 +123,7 @@ class UserSignInScreen extends StatelessWidget {
                               )
                               .then((_) {
                                 _isLoading.value = false;
+                                Get.offNamed(AppRoutes.userdashboard);
                               })
                               .catchError((error) {
                                 // Handle any errors that occur during login

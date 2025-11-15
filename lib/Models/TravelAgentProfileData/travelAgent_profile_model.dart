@@ -1,4 +1,4 @@
-class UserProfileModel {
+class TravelAgentProfileModel {
   final String? id;
   final String? name;
   final String? email;
@@ -11,7 +11,7 @@ class UserProfileModel {
   final double? expenses;
   final bool isUser;
 
-  UserProfileModel({
+  TravelAgentProfileModel({
     this.id,
     this.name,
     this.email,
@@ -42,8 +42,8 @@ class UserProfileModel {
   }
 
   // Convert Firebase (Map) → model
-  factory UserProfileModel.fromFirebase(Map<String, dynamic> data) {
-    return UserProfileModel(
+  factory TravelAgentProfileModel.fromFirebase(Map<String, dynamic> data) {
+    return TravelAgentProfileModel(
       id: data['id'],
       name: data['name'],
       email: data['email'],

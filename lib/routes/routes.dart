@@ -27,7 +27,9 @@ class AppRoutes {
   static const String userregister = '/register';
   static const String usersignin = '/usersignin';
   static const String userdashboard = '/userdashboard';
+
   static const String admindashboard = '/admindashboard';
+
   static const String forgotpassword = '/forgotpassword';
 
   // User Features Routes
@@ -55,7 +57,7 @@ class AppRoutes {
     GetPage(name: usersignin, page: () => UserSignInScreen()),
     GetPage(name: userregister, page: () => UserSignUpScreen()),
     GetPage(name: userdashboard, page: () => UserDashboard()),
-    GetPage(name: usersignin, page: () => AdminDashboard()),
+    GetPage(name: admindashboard, page: () => AdminDashboard()),
     GetPage(name: forgotpassword, page: () => ForgotPasswordScreen()),
 
     // User Features Pages

@@ -3,12 +3,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_umrah_app/Models/UserProfileData/user_profile_model.dart';
+import 'package:smart_umrah_app/Models/TravelAgentProfileData/travelAgent_profile_model.dart';
+import 'package:smart_umrah_app/Models/UserProfileDataModel/user_profile_datamodel.dart';
 
 class NewProfileDataCollection {
   final FirebaseFirestore database = FirebaseFirestore.instance;
 
-  Future<void> saveUserProfileData(UserProfileModel user) async {
+  Future<void> saveUserProfileData(UserProfileDatamodel user) async {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;
       if (uid == null) {
@@ -18,9 +19,9 @@ class NewProfileDataCollection {
 
       final docRef = database
           .collection("Users")
-          .withConverter<UserProfileModel>(
+          .withConverter<UserProfileDatamodel>(
             fromFirestore: (snap, _) =>
-                UserProfileModel.fromFirebase(snap.data()!),
+                UserProfileDatamodel.fromFirebase(snap.data()!),
             toFirestore: (usr, _) => usr.toFirebase(),
           )
           .doc(uid);
@@ -38,13 +39,13 @@ class NewProfileDataCollection {
     }
   }
 
-  Future<UserProfileModel?> fetchUserProfileData(String uid) async {
+  Future<UserProfileDatamodel?> fetchUserProfileData(String uid) async {
     try {
       final docRef = database
           .collection("Users")
-          .withConverter<UserProfileModel>(
+          .withConverter<UserProfileDatamodel>(
             fromFirestore: (snap, _) =>
-                UserProfileModel.fromFirebase(snap.data()!),
+                UserProfileDatamodel.fromFirebase(snap.data()!),
             toFirestore: (usr, _) => usr.toFirebase(),
           )
           .doc(uid);
@@ -63,7 +64,7 @@ class NewProfileDataCollection {
     }
   }
 
-  Future<void> updateUserProfileData(UserProfileModel user) async {
+  Future<void> updateUserProfileData(UserProfileDatamodel user) async {
     try {
       final uid = FirebaseAuth.instance.currentUser?.uid;
       if (uid == null) {
@@ -72,9 +73,9 @@ class NewProfileDataCollection {
 
       final docRef = database
           .collection("Profiles")
-          .withConverter<UserProfileModel>(
+          .withConverter<UserProfileDatamodel>(
             fromFirestore: (snap, _) =>
-                UserProfileModel.fromFirebase(snap.data()!),
+                UserProfileDatamodel.fromFirebase(snap.data()!),
             toFirestore: (usr, _) => usr.toFirebase(),
           )
           .doc(uid);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:smart_umrah_app/Models/UserProfileData/user_profile_model.dart';
+import 'package:smart_umrah_app/Models/TravelAgentProfileData/travelAgent_profile_model.dart';
 import 'package:smart_umrah_app/Services/firebaseServices/firebaseDatabase/AgentData/agent_data.dart';
 
 class ViewTravelAgent extends StatelessWidget {
@@ -48,9 +48,9 @@ class ViewTravelAgent extends StatelessWidget {
             );
           }
 
-          final List<UserProfileModel> agents = snapshot.data!.docs
+          final List<TravelAgentProfileModel> agents = snapshot.data!.docs
               .map(
-                (doc) => UserProfileModel.fromFirebase(
+                (doc) => TravelAgentProfileModel.fromFirebase(
                   doc.data() as Map<String, dynamic>,
                 ),
               )

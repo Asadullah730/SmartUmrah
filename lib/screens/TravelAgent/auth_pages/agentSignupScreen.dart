@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/Controller/authControllers/userauthcontroller/usersignup_controller.dart';
-import 'package:smart_umrah_app/Models/UserProfileData/user_profile_model.dart';
+import 'package:smart_umrah_app/Models/TravelAgentProfileData/travelAgent_profile_model.dart';
 import 'package:smart_umrah_app/Services/firebaseServices/firebaseDatabase/AgentData/agent_data.dart';
 import 'package:smart_umrah_app/getUserId/getUid.dart';
 import 'package:smart_umrah_app/screens/TravelAgent/auth_pages/agent_email_verification.dart';
@@ -196,7 +196,7 @@ class TravelAgentSignUpScreen extends StatelessWidget {
                                   .trim(),
                             );
 
-                            final agentProfile = UserProfileModel(
+                            final agentProfile = TravelAgentProfileModel(
                               id: getID(),
                               name: _agentNameController.text.trim(),
                               email: _emailController.text.trim(),

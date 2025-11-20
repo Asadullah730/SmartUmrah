@@ -230,7 +230,6 @@ class _AgentEmailVerificationScreenState
               // Wrong Email Option
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context);
                   Get.toNamed(AppRoutes.agentsignin);
                 },
                 child: Text(

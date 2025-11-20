@@ -127,10 +127,9 @@ class ManageDocScreen extends StatelessWidget {
       backgroundColor: ManageDocController.primaryBackgroundColor,
       appBar: AppBar(
         backgroundColor: ManageDocController.primaryBackgroundColor,
-        title: const Text(
-          'Important Documents',
-          style: TextStyle(color: Colors.white),
-        ),
+        foregroundColor: Colors.white,
+        title: const Text('Important Documents'),
+        centerTitle: true,
       ),
       body: Obx(() {
         if (controller.documents.isEmpty) {

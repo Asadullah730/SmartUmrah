@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:smart_umrah_app/DataLayer/AgentData/features.dart';
 import 'package:smart_umrah_app/Services/firebaseServices/AuthServices/logout.dart';
 
@@ -12,9 +13,7 @@ class TravelAgentDashboardScreen extends StatelessWidget {
   static const Color accentColor = Color(0xFF3B82F6);
 
   void _handleFeatureTap(BuildContext context, String route) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Navigating to $route (Not implemented yet)')),
-    );
+    Get.toNamed(route);
   }
 
   @override

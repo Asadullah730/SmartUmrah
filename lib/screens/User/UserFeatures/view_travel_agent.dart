@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 import 'package:smart_umrah_app/Models/TravelAgentProfileData/travelAgent_profile_model.dart';
 import 'package:smart_umrah_app/Services/firebaseServices/firebaseDatabase/AgentData/agent_data.dart';
+import 'package:smart_umrah_app/routes/routes.dart';
+import 'package:smart_umrah_app/screens/User/chatScreen.dart';
 
 class ViewTravelAgent extends StatelessWidget {
   const ViewTravelAgent({super.key});
-
-  void _openChat(BuildContext context, String agentName) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Open chat with $agentName (Not implemented yet)'),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +24,23 @@ class ViewTravelAgent extends StatelessWidget {
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
+
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.refresh, color: Colors.white),
+            onPressed: () {
+              // Force rebuild to refresh data
+              (context as Element).reassemble();
+            },
+          ),
+
+          IconButton(
+            onPressed: () {
+              Get.toNamed(AppRoutes.allChats);
+            },
+            icon: Icon(Icons.message_rounded, color: Colors.white),
+          ),
+        ],
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
@@ -114,8 +126,15 @@ class ViewTravelAgent extends StatelessWidget {
                       ),
                       // Chat button
                       ElevatedButton.icon(
-                        onPressed: () =>
-                            _openChat(context, agent.name ?? "Agent"),
+                        onPressed: () {
+                          Get.to(
+                            () => ChatScreen(
+                              partnerId: agent.id ?? "",
+                              partnerName: agent.name ?? "Agent",
+                            ),
+                          );
+                        },
+
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF3B82F6),
                           shape: RoundedRectangleBorder(

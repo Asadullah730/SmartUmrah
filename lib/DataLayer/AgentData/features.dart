@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smart_umrah_app/routes/routes.dart';
 
 List<Map<String, dynamic>> get agentFeatures => [
   {
@@ -29,7 +30,7 @@ List<Map<String, dynamic>> get agentFeatures => [
     'title': 'In-app Messaging',
     'icon': Icons.message,
     'description': 'Communicate with pilgrims',
-    'route': '/agent/messaging',
+    'route': AppRoutes.allChats,
   },
   {
     'title': 'Book Hotel & Transport',

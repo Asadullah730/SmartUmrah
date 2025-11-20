@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/DataLayer/User/UserData/user_features.dart';
 import 'package:smart_umrah_app/Services/firebaseServices/AuthServices/logout.dart';
+import 'package:smart_umrah_app/routes/routes.dart';
 import '../UserFeatures/umrah_journal_screen.dart';
 
 class UserDashboardController extends GetxController {
@@ -25,6 +26,66 @@ class UserDashboard extends StatelessWidget {
   static const Color navBarColor = Color(0xFF1E2A38);
   static const Color navBarSelectedItemColor = accentColor;
   static const Color navBarUnselectedItemColor = Colors.white54;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: primaryBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: primaryBackgroundColor,
+        foregroundColor: Colors.white,
+        elevation: 0,
+        title: const Text(
+          "User Dashboard",
+          style: TextStyle(
+            color: textColorPrimary,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout, color: textColorPrimary),
+            onPressed: () async => await logoutUser(),
+            tooltip: 'Logout',
+          ),
+        ],
+      ),
+      body: Obx(() {
+        return IndexedStack(
+          index: controller.selectedIndex.value,
+          children: [
+            _buildHomeContent(context),
+            _buildJournalContent(context),
+            _buildSettingsContent(context),
+          ],
+        );
+      }),
+
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed(AppRoutes.allChats);
+        },
+      ),
+      bottomNavigationBar: Obx(() {
+        return BottomNavigationBar(
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+            BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Journal'),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
+          currentIndex: controller.selectedIndex.value,
+          selectedItemColor: navBarSelectedItemColor,
+          unselectedItemColor: navBarUnselectedItemColor,
+          backgroundColor: navBarColor,
+          onTap: controller.changeTab,
+          type: BottomNavigationBarType.fixed,
+        );
+      }),
+    );
+  }
 
   Widget _buildHomeContent(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -246,60 +307,6 @@ class UserDashboard extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: primaryBackgroundColor,
-      appBar: AppBar(
-        backgroundColor: primaryBackgroundColor,
-        foregroundColor: Colors.white,
-        elevation: 0,
-        title: const Text(
-          "User Dashboard",
-          style: TextStyle(
-            color: textColorPrimary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, color: textColorPrimary),
-            onPressed: () async => await logoutUser(),
-            tooltip: 'Logout',
-          ),
-        ],
-      ),
-      body: Obx(() {
-        return IndexedStack(
-          index: controller.selectedIndex.value,
-          children: [
-            _buildHomeContent(context),
-            _buildJournalContent(context),
-            _buildSettingsContent(context),
-          ],
-        );
-      }),
-      bottomNavigationBar: Obx(() {
-        return BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Journal'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
-            ),
-          ],
-          currentIndex: controller.selectedIndex.value,
-          selectedItemColor: navBarSelectedItemColor,
-          unselectedItemColor: navBarUnselectedItemColor,
-          backgroundColor: navBarColor,
-          onTap: controller.changeTab,
-          type: BottomNavigationBarType.fixed,
-        );
-      }),
     );
   }
 }

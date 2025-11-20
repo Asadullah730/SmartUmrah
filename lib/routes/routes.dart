@@ -3,6 +3,7 @@ import 'package:smart_umrah_app/screens/Admin/dashbord.dart';
 import 'package:smart_umrah_app/screens/TravelAgent/auth_pages/agentSignIn.dart';
 import 'package:smart_umrah_app/screens/TravelAgent/auth_pages/agentSignupScreen.dart';
 import 'package:smart_umrah_app/screens/TravelAgent/travel_agent_dashboard.dart';
+import 'package:smart_umrah_app/screens/User/AllChatsScreen.dart';
 import 'package:smart_umrah_app/screens/User/UserDashboard/user_dashboard.dart';
 import 'package:smart_umrah_app/screens/User/UserFeatures/TawafSaiCounter/tawaf_sai_counter.dart';
 import 'package:smart_umrah_app/screens/User/UserFeatures/manage_docs.dart';
@@ -27,10 +28,10 @@ class AppRoutes {
   static const String userregister = '/register';
   static const String usersignin = '/usersignin';
   static const String userdashboard = '/userdashboard';
-
-  static const String admindashboard = '/admindashboard';
-
   static const String forgotpassword = '/forgotpassword';
+
+  // Admin Side Routes
+  static const String admindashboard = '/admindashboard';
 
   // User Features Routes
   static const String umrahguide = '/umrahguide';
@@ -51,6 +52,8 @@ class AppRoutes {
   static const String agentsignin = '/agentsignin';
   static const String agentdashboard = '/agentdashboard';
 
+  // Chat Route
+  static const String allChats = '/allchats';
   final getpags = [
     // User Side Pages
     GetPage(name: landingscreen, page: () => LandingScreen()),
@@ -78,5 +81,8 @@ class AppRoutes {
     GetPage(name: agentregister, page: () => TravelAgentSignUpScreen()),
     GetPage(name: agentsignin, page: () => AgentSignInScreen()),
     GetPage(name: agentdashboard, page: () => TravelAgentDashboardScreen()),
+
+    // Chat Page
+    GetPage(name: allChats, page: () => AllChatsScreen()),
   ];
 }

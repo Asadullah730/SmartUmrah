@@ -187,6 +187,7 @@ class TravelAgentSignUpScreen extends StatelessWidget {
                       onPressed: () async {
                         if (_formKey.currentState!.validate()) {
                           _isLoading.value = true;
+
                           try {
                             await signupController.signUpUser(
                               context,

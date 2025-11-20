@@ -104,7 +104,6 @@ class _AgentEmailVerificationScreenState
         await prefs.setString('userEmail', user?.email ?? '');
 
         // Navigate to home screen
-        Navigator.pop(context);
         Get.toNamed(AppRoutes.agentsignin);
       }
     } catch (e) {

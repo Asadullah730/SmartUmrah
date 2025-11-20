@@ -60,12 +60,6 @@ class UserDashboard extends StatelessWidget {
           ],
         );
       }),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.toNamed(AppRoutes.allChats);
-        },
-      ),
       bottomNavigationBar: Obx(() {
         return BottomNavigationBar(
           items: const <BottomNavigationBarItem>[

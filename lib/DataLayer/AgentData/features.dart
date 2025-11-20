@@ -3,22 +3,10 @@ import 'package:smart_umrah_app/routes/routes.dart';
 
 List<Map<String, dynamic>> get agentFeatures => [
   {
-    'title': 'Register Profile',
-    'icon': Icons.person_add,
-    'description': 'Create new agent profile',
-    'route': '/agent/register-profile',
-  },
-  {
-    'title': 'Manage Profile',
-    'icon': Icons.person,
-    'description': 'Edit agent details',
-    'route': '/agent/manage-profile',
-  },
-  {
     'title': 'Generate Schedule',
     'icon': Icons.calendar_month,
     'description': 'Create Umrah itineraries',
-    'route': '/agent/generate-schedule',
+    'route': AppRoutes.agentscedule,
   },
   {
     'title': 'Notifications',

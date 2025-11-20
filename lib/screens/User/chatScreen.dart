@@ -40,8 +40,7 @@ class ChatScreen extends StatelessWidget {
           children: [
             CircleAvatar(
               radius: 18,
-              backgroundImage:
-                  partnerImageUrl != null && partnerImageUrl!.isNotEmpty
+              backgroundImage: partnerImageUrl != null
                   ? NetworkImage(partnerImageUrl!)
                   : null,
               child: partnerImageUrl == null || partnerImageUrl!.isEmpty

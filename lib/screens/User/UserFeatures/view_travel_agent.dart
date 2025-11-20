@@ -87,9 +87,13 @@ class ViewTravelAgent extends StatelessWidget {
                       // Agent image
                       CircleAvatar(
                         radius: 30,
-                        backgroundImage: const NetworkImage(
-                          'https://via.placeholder.com/150',
-                        ),
+
+                        backgroundImage: agent.profileImageUrl != null
+                            ? NetworkImage(agent.profileImageUrl!)
+                            : const AssetImage(
+                                    'assets/images/agent_placeholder.png',
+                                  )
+                                  as ImageProvider,
                       ),
                       const SizedBox(width: 16),
                       // Agent details
@@ -131,6 +135,7 @@ class ViewTravelAgent extends StatelessWidget {
                             () => ChatScreen(
                               partnerId: agent.id ?? "",
                               partnerName: agent.name ?? "Agent",
+                              partnerImageUrl: agent.profileImageUrl,
                             ),
                           );
                         },

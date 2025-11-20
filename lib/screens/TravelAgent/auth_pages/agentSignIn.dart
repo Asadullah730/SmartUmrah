@@ -22,6 +22,15 @@ class AgentSignInScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0XFF263442),
+      appBar: AppBar(
+        backgroundColor: const Color(0XFF263442),
+        elevation: 0,
+        centerTitle: true,
+        title: const Text(
+          "Agent Login",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+        ),
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),

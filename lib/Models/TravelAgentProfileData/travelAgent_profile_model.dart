@@ -8,8 +8,8 @@ class TravelAgentProfileModel {
   final String? dateOfBirth;
   final String? passportNumber;
   final String? agencyName; // New field for agency name for travel agents
-  final double? expenses;
-  final bool isUser;
+  final String profileImageUrl;
+  final bool isVerified;
 
   TravelAgentProfileModel({
     this.id,
@@ -21,8 +21,8 @@ class TravelAgentProfileModel {
     this.dateOfBirth,
     this.passportNumber,
     this.agencyName, // New field for agency name for travel agents
-    this.expenses,
-    this.isUser = true,
+    this.profileImageUrl = '',
+    this.isVerified = false,
   });
 
   Map<String, dynamic> toFirebase() {
@@ -36,8 +36,8 @@ class TravelAgentProfileModel {
       'dateOfBirth': dateOfBirth,
       'passportNumber': passportNumber,
       'agencyName': agencyName, // Include agency name in the map
-      'expenses': expenses,
-      'isUser': isUser,
+      'profileImageUrl': profileImageUrl,
+      'isVerified': isVerified,
     };
   }
 
@@ -53,10 +53,8 @@ class TravelAgentProfileModel {
       dateOfBirth: data['dateOfBirth'],
       passportNumber: data['passportNumber'],
       agencyName: data['agencyName'], // Retrieve agency name from the map
-      expenses: (data['expenses'] != null)
-          ? double.tryParse(data['expenses'].toString())
-          : null,
-      isUser: data['isUser'] ?? true,
+      profileImageUrl: data['profileImageUrl'] ?? '',
+      isVerified: data['isVerified'] ?? false,
     );
   }
 }

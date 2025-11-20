@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:smart_umrah_app/screens/Admin/dashbord.dart';
 import 'package:smart_umrah_app/screens/TravelAgent/auth_pages/agentSignIn.dart';
 import 'package:smart_umrah_app/screens/TravelAgent/auth_pages/agentSignupScreen.dart';
+import 'package:smart_umrah_app/screens/TravelAgent/GenrateScedule/genrate_scedule.dart';
 import 'package:smart_umrah_app/screens/TravelAgent/travel_agent_dashboard.dart';
 import 'package:smart_umrah_app/screens/User/AllChatsScreen.dart';
 import 'package:smart_umrah_app/screens/User/UserDashboard/user_dashboard.dart';
@@ -51,6 +52,8 @@ class AppRoutes {
   static const String agentregister = '/agentregister';
   static const String agentsignin = '/agentsignin';
   static const String agentdashboard = '/agentdashboard';
+  static const String agentSideAllChats = '/agentallchats';
+  static const String agentscedule = '/agentscedule';
 
   // Chat Route
   static const String allChats = '/allchats';
@@ -81,6 +84,7 @@ class AppRoutes {
     GetPage(name: agentregister, page: () => TravelAgentSignUpScreen()),
     GetPage(name: agentsignin, page: () => AgentSignInScreen()),
     GetPage(name: agentdashboard, page: () => TravelAgentDashboardScreen()),
+    GetPage(name: agentscedule, page: () => GenerateSchedulePage()),
 
     // Chat Page
     GetPage(name: allChats, page: () => AllChatsScreen()),

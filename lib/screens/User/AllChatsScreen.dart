@@ -72,7 +72,7 @@ class AllChatsScreen extends StatelessWidget {
 
               return FutureBuilder<DocumentSnapshot>(
                 future: _firestore
-                    .collection('TravelAgent')
+                    .collection('TravelAgents')
                     .doc(partnerId)
                     .get(),
                 builder: (context, userSnapshot) {

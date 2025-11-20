@@ -37,6 +37,15 @@ class TravelAgentSignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF263442),
+          elevation: 0,
+          centerTitle: true,
+          title: const Text(
+            "Agent Registration",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600),
+          ),
+        ),
         backgroundColor: const Color(0xFF263442),
         body: Padding(
           padding: EdgeInsets.symmetric(
@@ -202,7 +211,7 @@ class TravelAgentSignUpScreen extends StatelessWidget {
                               name: _agentNameController.text.trim(),
                               email: _emailController.text.trim(),
                               password: _passwordController.text.trim(),
-                              isUser: false,
+                              isVerified: false,
                               passportNumber: _passportController.text.trim(),
                               permanentAddress: _addressController.text.trim(),
                               gender: selectedGender.value,

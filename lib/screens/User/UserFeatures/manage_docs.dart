@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_umrah_app/Controller/DocumentController/docs_controller.dart';
+import 'package:smart_umrah_app/Controller/userControllers/DocumentController/docs_controller.dart';
 
 class ManageDocScreen extends StatelessWidget {
   ManageDocScreen({super.key});

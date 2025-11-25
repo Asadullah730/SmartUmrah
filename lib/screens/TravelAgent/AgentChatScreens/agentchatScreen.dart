@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:smart_umrah_app/Controller/userControllers/ChatController/chat_controller.dart';
+import 'package:smart_umrah_app/Controller/AgentControllers/agent_chat_controller.dart';
 
-class ChatScreen extends StatelessWidget {
+class AgentChatScreen extends StatelessWidget {
   final String partnerId;
   final String partnerName;
   final String? partnerImageUrl;
 
   final TextEditingController _messageController = TextEditingController();
-  final ChatController chatController = Get.put(ChatController());
+  final AgentChatController chatController = Get.put(AgentChatController());
 
-  ChatScreen({
+  AgentChatScreen({
     super.key,
     required this.partnerId,
     required this.partnerName,

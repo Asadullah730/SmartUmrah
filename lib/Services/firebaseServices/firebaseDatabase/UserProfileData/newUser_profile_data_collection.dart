@@ -1,9 +1,6 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
-import 'package:smart_umrah_app/Models/TravelAgentProfileData/travelAgent_profile_model.dart';
 import 'package:smart_umrah_app/Models/UserProfileDataModel/user_profile_datamodel.dart';
 
 class NewProfileDataCollection {

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:smart_umrah_app/Controller/JournalController/journal_controller.dart';
+import 'package:smart_umrah_app/Controller/userControllers/JournalController/journal_controller.dart';
 
 class UmrahJournalScreen extends StatelessWidget {
   UmrahJournalScreen({super.key});

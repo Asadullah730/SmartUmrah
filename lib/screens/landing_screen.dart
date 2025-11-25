@@ -110,6 +110,12 @@ class LandingScreen extends StatelessWidget {
                   ),
                 ),
               ),
+
+              SizedBox(height: screenHeight * 0.025),
+              ElevatedButton(
+                onPressed: () => Get.toNamed(AppRoutes.admindashboard),
+                child: Text("Test Admin Login"),
+              ),
             ],
           ),
         ),

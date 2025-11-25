@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:smart_umrah_app/Controller/ImagePickerController/image_picker.dart';
+import 'package:smart_umrah_app/Controller/userControllers/ImagePickerController/image_picker.dart';
 import 'package:smart_umrah_app/Models/TravelAgentProfileData/travelAgent_profile_model.dart';
 import 'package:smart_umrah_app/Models/UserProfileDataModel/user_profile_datamodel.dart';
 import 'package:smart_umrah_app/Services/SupabaseServices/supabaseStorage/agentProfileImage.dart';

@@ -1,5 +1,10 @@
 import 'package:get/get.dart';
-import 'package:smart_umrah_app/screens/Admin/dashbord.dart';
+import 'package:smart_umrah_app/screens/Admin/admin_dashboard.dart';
+import 'package:smart_umrah_app/screens/Admin/manage_pilgram_adminSide.dart';
+import 'package:smart_umrah_app/screens/Admin/manage_travel_agent.dart';
+import 'package:smart_umrah_app/screens/Admin/rules&regulation.dart';
+import 'package:smart_umrah_app/screens/Admin/verify_agent_notification_screen.dart';
+import 'package:smart_umrah_app/screens/TravelAgent/AgentChatScreens/ViewAllChatsScreen.dart';
 import 'package:smart_umrah_app/screens/TravelAgent/auth_pages/agentSignIn.dart';
 import 'package:smart_umrah_app/screens/TravelAgent/auth_pages/agentSignupScreen.dart';
 import 'package:smart_umrah_app/screens/TravelAgent/GenrateScedule/genrate_scedule.dart';
@@ -33,6 +38,12 @@ class AppRoutes {
 
   // Admin Side Routes
   static const String admindashboard = '/admindashboard';
+  static const String adminrulesandregulation = '/adminrulesandregulation';
+  static const String adminmanagetravelagent = '/adminmanagetravelagent';
+  static const String unverfiedagentnotifications =
+      '/unverfiedagentnotifications';
+
+  static const String adminmanagepilgram = '/adminmanagepilgram';
 
   // User Features Routes
   static const String umrahguide = '/umrahguide';
@@ -52,9 +63,8 @@ class AppRoutes {
   static const String agentregister = '/agentregister';
   static const String agentsignin = '/agentsignin';
   static const String agentdashboard = '/agentdashboard';
-  static const String agentSideAllChats = '/agentallchats';
   static const String agentscedule = '/agentscedule';
-
+  static const String agentviewAllchats = '/agentviewAllchats';
   // Chat Route
   static const String allChats = '/allchats';
   final getpags = [
@@ -63,7 +73,6 @@ class AppRoutes {
     GetPage(name: usersignin, page: () => UserSignInScreen()),
     GetPage(name: userregister, page: () => UserSignUpScreen()),
     GetPage(name: userdashboard, page: () => UserDashboard()),
-    GetPage(name: admindashboard, page: () => AdminDashboard()),
     GetPage(name: forgotpassword, page: () => ForgotPasswordScreen()),
 
     // User Features Pages
@@ -85,8 +94,22 @@ class AppRoutes {
     GetPage(name: agentsignin, page: () => AgentSignInScreen()),
     GetPage(name: agentdashboard, page: () => TravelAgentDashboardScreen()),
     GetPage(name: agentscedule, page: () => GenerateSchedulePage()),
+    GetPage(name: agentviewAllchats, page: () => AgentViewAllChatsScreen()),
 
     // Chat Page
     GetPage(name: allChats, page: () => AllChatsScreen()),
+
+    // Admin Side Pages
+    GetPage(name: admindashboard, page: () => AdminDashboardScreen()),
+    GetPage(name: adminrulesandregulation, page: () => UpdateRulesScreen()),
+    GetPage(
+      name: adminmanagetravelagent,
+      page: () => AdminManageAgentsScreen(),
+    ),
+    GetPage(
+      name: unverfiedagentnotifications,
+      page: () => AdminNotificationsUnverifiedAgents(),
+    ),
+    GetPage(name: adminmanagepilgram, page: () => AdminManagePilgrimsScreen()),
   ];
 }

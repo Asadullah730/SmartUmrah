@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'package:smart_umrah_app/Models/TravelAgentProfileData/travelAgent_profil
 import 'package:smart_umrah_app/Services/firebaseServices/firebaseDatabase/AgentData/agent_data.dart';
 import 'package:smart_umrah_app/routes/routes.dart';
 import 'package:smart_umrah_app/screens/User/chatScreen.dart';
+import 'package:smart_umrah_app/widgets/customButton.dart';
 
 class ViewTravelAgent extends StatelessWidget {
   const ViewTravelAgent({super.key});
@@ -125,37 +127,76 @@ class ViewTravelAgent extends StatelessWidget {
                                 fontSize: 13,
                               ),
                             ),
+
+                            const SizedBox(height: 8),
+                            Text(
+                              agent.isVerified == true
+                                  ? "Verified Agent"
+                                  : "Unverified Agent",
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 13,
+                              ),
+                            ),
+
+                            const SizedBox(height: 8),
+                            Text(
+                              agent.agencyName ?? "No Agency Name",
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 13,
+                              ),
+                            ),
+
+                            CustomButton(
+                              text: 'Send Request',
+                              onPressed: () {
+                                sendRequestToAgent(
+                                  agent.id ?? "",
+                                  agent.name ?? "Agent",
+                                );
+                              },
+                              height: 40,
+                              width: 150,
+                              backgroundColor: const Color.fromARGB(
+                                255,
+                                24,
+                                25,
+                                26,
+                              ),
+                            ),
                           ],
                         ),
                       ),
-                      // Chat button
-                      ElevatedButton.icon(
-                        onPressed: () {
-                          Get.to(
-                            () => ChatScreen(
-                              partnerId: agent.id ?? "",
-                              partnerName: agent.name ?? "Agent",
-                              partnerImageUrl: agent.profileImageUrl,
-                            ),
-                          );
-                        },
 
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF3B82F6),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
-                          ),
-                        ),
-                        icon: const Icon(Icons.chat, size: 20),
-                        label: const Text(
-                          "Chat",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
+                      // Chat button
+                      // ElevatedButton.icon(
+                      //   onPressed: () {
+                      //     Get.to(
+                      //       () => ChatScreen(
+                      //         partnerId: agent.id ?? "",
+                      //         partnerName: agent.name ?? "Agent",
+                      //         partnerImageUrl: agent.profileImageUrl,
+                      //       ),
+                      //     );
+                      //   },
+
+                      //   style: ElevatedButton.styleFrom(
+                      //     backgroundColor: const Color(0xFF3B82F6),
+                      //     shape: RoundedRectangleBorder(
+                      //       borderRadius: BorderRadius.circular(12),
+                      //     ),
+                      //     padding: const EdgeInsets.symmetric(
+                      //       horizontal: 12,
+                      //       vertical: 10,
+                      //     ),
+                      //   ),
+                      //   icon: const Icon(Icons.chat, size: 20),
+                      //   label: const Text(
+                      //     "",
+                      //     style: TextStyle(fontWeight: FontWeight.bold),
+                      //   ),
+                      // ),
                     ],
                   ),
                 ),
@@ -164,6 +205,54 @@ class ViewTravelAgent extends StatelessWidget {
           );
         },
       ),
+    );
+  }
+
+  Future<void> sendRequestToAgent(String agentId, String agentName) async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user == null) {
+      Get.snackbar(
+        "Error",
+        "You must be logged in to send request",
+        backgroundColor: Colors.redAccent,
+      );
+      return;
+    }
+
+    final requestRef = FirebaseFirestore.instance.collection("Requests");
+
+    // Check if already requested
+    final alreadyRequested = await requestRef
+        .where("pilgrimId", isEqualTo: user.uid)
+        .where("agentId", isEqualTo: agentId)
+        .get();
+
+    if (alreadyRequested.docs.isNotEmpty) {
+      Get.snackbar(
+        "Already Sent",
+        "You have already sent a request to this agent.",
+        backgroundColor: Colors.orangeAccent,
+      );
+      return;
+    }
+
+    await requestRef.add({
+      "pilgrimId": user.uid,
+      "pilgrimEmail": user.email,
+      "pilgrimName": user.displayName ?? "Unknown User",
+
+      "agentId": agentId,
+      "agentName": agentName,
+
+      "status": "pending",
+      "timestamp": FieldValue.serverTimestamp(),
+    });
+
+    Get.snackbar(
+      "Request Sent",
+      "Your request has been sent to the travel agent.",
+      backgroundColor: Colors.green,
     );
   }
 }

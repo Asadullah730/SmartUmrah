@@ -15,4 +15,11 @@ List<Map<String, dynamic>> get agentFeatures => [
     'description': 'Communicate with pilgrims',
     'route': AppRoutes.agentviewAllchats,
   },
+
+  {
+    'title': 'Pilgram Requests',
+    'icon': Icons.person_add,
+    'description': 'Accept or reject pilgrim requests',
+    'route': AppRoutes.agentpilgramrequests,
+  },
 ];

@@ -52,7 +52,9 @@ class AllChatsScreen extends StatelessWidget {
               final participants = List<String>.from(data['participants']);
               final partnerId = participants.firstWhere(
                 (id) => id != currentUserId,
+                orElse: () => '',
               );
+              // Detect group chat
 
               final lastMessage = data['lastMessage'] ?? "Tap to chat";
               final lastStatus = data.containsKey('lastMessageStatus')
@@ -70,13 +72,16 @@ class AllChatsScreen extends StatelessWidget {
                 formattedTime = _formatTime(dateTime);
               }
 
-              return FutureBuilder<DocumentSnapshot>(
-                future: _firestore
-                    .collection('TravelAgents')
-                    .doc(partnerId)
-                    .get(),
+              final isGroupChat = participants.length > 2;
+              return FutureBuilder<DocumentSnapshot?>(
+                future: isGroupChat
+                    ? Future.value(null)
+                    : _firestore
+                          .collection('TravelAgents')
+                          .doc(partnerId)
+                          .get(),
                 builder: (context, userSnapshot) {
-                  if (!userSnapshot.hasData) {
+                  if (!isGroupChat && !userSnapshot.hasData) {
                     return const ListTile(
                       leading: CircleAvatar(
                         backgroundColor: Colors.deepPurple,
@@ -87,10 +92,15 @@ class AllChatsScreen extends StatelessWidget {
                     );
                   }
 
-                  final userData =
-                      userSnapshot.data!.data() as Map<String, dynamic>?;
-                  final partnerName = userData?['name'] ?? "Unknown";
-                  final profileImageUrl = userData?['profileImageUrl'];
+                  final userData = isGroupChat
+                      ? null
+                      : userSnapshot.data!.data() as Map<String, dynamic>?;
+                  final partnerName = isGroupChat
+                      ? (data['groupName'] ?? "Group Chat")
+                      : (userData?['name'] ?? "Unknown");
+                  final profileImageUrl = isGroupChat
+                      ? null
+                      : userData?['profileImageUrl'];
 
                   return ListTile(
                     leading: CircleAvatar(
@@ -123,7 +133,9 @@ class AllChatsScreen extends StatelessWidget {
                       style: const TextStyle(color: Colors.grey, fontSize: 12),
                     ),
                     onTap: () async {
-                      final chatId = getChatId(currentUserId, partnerId);
+                      final chatId = isGroupChat
+                          ? chatDoc.id
+                          : getChatId(currentUserId, partnerId);
                       final chatRef = _firestore
                           .collection('chats')
                           .doc(chatId);
@@ -141,7 +153,7 @@ class AllChatsScreen extends StatelessWidget {
 
                       Get.to(
                         () => ChatScreen(
-                          partnerId: partnerId,
+                          partnerId: isGroupChat ? chatDoc.id : partnerId,
                           partnerName: partnerName,
                           partnerImageUrl: profileImageUrl,
                         ),

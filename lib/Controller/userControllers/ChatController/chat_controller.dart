@@ -9,10 +9,19 @@ class ChatController extends GetxController {
 
   RxList<QueryDocumentSnapshot> messages = <QueryDocumentSnapshot>[].obs;
   late String chatId;
+  bool isGroupChat = false;
 
   void initChat(String partnerId) async {
-    chatId = _getChatId(currentUserId, partnerId);
-    await _createChatIfNotExists(partnerId);
+    // If partnerId is an existing chat doc id, treat as group chat
+    final docSnap = await _firestore.collection('chats').doc(partnerId).get();
+    if (docSnap.exists) {
+      isGroupChat = true;
+      chatId = partnerId;
+    } else {
+      isGroupChat = false;
+      chatId = _getChatId(currentUserId, partnerId);
+      await _createChatIfNotExists(partnerId);
+    }
 
     // Stream messages
     _firestore
@@ -24,18 +33,21 @@ class ChatController extends GetxController {
         .listen((snapshot) {
           messages.value = snapshot.docs;
         });
-    _firestore
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages')
-        .where('receiverId', isEqualTo: currentUserId)
-        .where('status', isEqualTo: 'sent')
-        .get()
-        .then((snapshot) {
-          for (var doc in snapshot.docs) {
-            doc.reference.update({'status': 'seen'});
-          }
-        });
+    // Mark 'sent' messages as seen only for 1:1 chats
+    if (!isGroupChat) {
+      _firestore
+          .collection('chats')
+          .doc(chatId)
+          .collection('messages')
+          .where('receiverId', isEqualTo: currentUserId)
+          .where('status', isEqualTo: 'sent')
+          .get()
+          .then((snapshot) {
+            for (var doc in snapshot.docs) {
+              doc.reference.update({'status': 'seen'});
+            }
+          });
+    }
   }
 
   String _getChatId(String userId1, String userId2) {
@@ -60,7 +72,7 @@ class ChatController extends GetxController {
 
     final messageData = {
       'senderId': currentUserId,
-      'receiverId': partnerId,
+      'receiverId': isGroupChat ? '' : partnerId,
       'text': messageText,
       'timestamp': FieldValue.serverTimestamp(),
       'status': 'sent',
@@ -74,11 +86,18 @@ class ChatController extends GetxController {
 
     await messageRef.add(messageData);
 
-    await _firestore.collection('chats').doc(chatId).set({
-      'participants': [currentUserId, partnerId],
-      'lastMessage': messageText,
-      'lastTimestamp': FieldValue.serverTimestamp(),
-    }, SetOptions(merge: true));
+    if (isGroupChat) {
+      await _firestore.collection('chats').doc(chatId).set({
+        'lastMessage': messageText,
+        'lastTimestamp': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    } else {
+      await _firestore.collection('chats').doc(chatId).set({
+        'participants': [currentUserId, partnerId],
+        'lastMessage': messageText,
+        'lastTimestamp': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
+    }
   }
 
   Future<void> deleteForMe(String messageId) async {

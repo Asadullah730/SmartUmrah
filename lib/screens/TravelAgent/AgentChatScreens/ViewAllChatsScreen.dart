@@ -162,12 +162,9 @@ class AgentViewAllChatsScreen extends StatelessWidget {
 
                       Get.to(
                         () => AgentChatScreen(
-                          partnerId: isGroupChat ? '' : partnerId,
+                          partnerId: isGroupChat ? chatDoc.id : partnerId,
                           partnerName: partnerName,
-
                           partnerImageUrl: '',
-                          // isGroupChat: isGroupChat,
-                          // participants: participants,
                         ),
                       );
                     },

@@ -119,6 +119,8 @@ class AgentChatScreen extends StatelessWidget {
                         final data = msg.data() as Map<String, dynamic>;
                         final isMe =
                             data['senderId'] == chatController.currentUserId;
+                        final senderId = data['senderId'] as String? ?? '';
+                        final senderName = isMe ? 'You' : 'Unknown';
                         final ts = data['timestamp'] as Timestamp?;
                         String timeText = ts != null
                             ? chatController.formatTime(ts.toDate())

@@ -82,8 +82,6 @@ class LandingScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(height: screenHeight * 0.025),
-
-              // Travel Agent Button
               SizedBox(
                 width: double.infinity,
                 height: 56,
@@ -112,10 +110,6 @@ class LandingScreen extends StatelessWidget {
               ),
 
               SizedBox(height: screenHeight * 0.025),
-              ElevatedButton(
-                onPressed: () => Get.toNamed(AppRoutes.admindashboard),
-                child: Text("Test Admin Login"),
-              ),
             ],
           ),
         ),

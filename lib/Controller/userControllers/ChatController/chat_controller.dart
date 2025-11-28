@@ -10,6 +10,7 @@ class ChatController extends GetxController {
   RxList<QueryDocumentSnapshot> messages = <QueryDocumentSnapshot>[].obs;
   late String chatId;
   bool isGroupChat = false;
+  RxMap<String, String> participantNames = <String, String>{}.obs;
 
   void initChat(String partnerId) async {
     // If partnerId is an existing chat doc id, treat as group chat
@@ -33,6 +34,15 @@ class ChatController extends GetxController {
         .listen((snapshot) {
           messages.value = snapshot.docs;
         });
+
+    // Listen to chat doc changes to keep participant list updated
+    _firestore.collection('chats').doc(chatId).snapshots().listen((doc) {
+      if (doc.exists) {
+        final map = doc.data() as Map<String, dynamic>;
+        final parts = List<String>.from(map['participants'] ?? []);
+        _fetchParticipantNames(parts);
+      }
+    });
     // Mark 'sent' messages as seen only for 1:1 chats
     if (!isGroupChat) {
       _firestore
@@ -64,6 +74,40 @@ class ChatController extends GetxController {
         'lastMessage': '',
         'lastTimestamp': FieldValue.serverTimestamp(),
       });
+    }
+    final createdDoc = await _firestore.collection('chats').doc(chatId).get();
+    if (createdDoc.exists) {
+      final parts = List<String>.from(createdDoc.data()?['participants'] ?? []);
+      await _fetchParticipantNames(parts);
+    }
+  }
+
+  Future<void> _fetchParticipantNames(List<String> ids) async {
+    final missing = ids
+        .where((id) => !participantNames.containsKey(id))
+        .toList();
+    if (missing.isEmpty) return;
+    for (final id in missing) {
+      try {
+        final userDoc = await _firestore.collection('Users').doc(id).get();
+        if (userDoc.exists) {
+          final data = userDoc.data();
+          participantNames[id] = data?['name'] ?? 'User';
+          continue;
+        }
+        final agentDoc = await _firestore
+            .collection('TravelAgents')
+            .doc(id)
+            .get();
+        if (agentDoc.exists) {
+          final data = agentDoc.data();
+          participantNames[id] = data?['name'] ?? 'Agent';
+          continue;
+        }
+        participantNames[id] = 'Unknown';
+      } catch (_) {
+        participantNames[id] = 'Unknown';
+      }
     }
   }
 

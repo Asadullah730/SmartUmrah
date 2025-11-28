@@ -12,67 +12,58 @@ class ForgotPasswordScreen extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final RxBool _isLoading = false.obs;
 
-  // Future<void> _sendResetLink(BuildContext context) async {
-  //   if (!_formKey.currentState!.validate()) return;
+  Future<void> _sendResetLink(BuildContext context) async {
+    if (!_formKey.currentState!.validate()) return;
 
-  //   final email = _emailController.text.trim().toLowerCase();
+    final email = _emailController.text.trim().toLowerCase();
 
-  //   try {
-  //     _isLoading.value = true;
+    try {
+      _isLoading.value = true;
 
-  //     final methods = await FirebaseAuth.instance.fetchSignInMethodsForEmail(
-  //       email,
-  //     );
+      // ----------- FIXED VERSION (works on all Firebase versions) ------------
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 
-  //     if (methods.isEmpty) {
-  //       _isLoading.value = false;
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         const SnackBar(
-  //           content: Text(
-  //             "This email is not registered. Please sign up first.",
-  //           ),
-  //           backgroundColor: Colors.red,
-  //         ),
-  //       );
-  //       return;
-  //     }
+      _isLoading.value = false;
 
-  //     await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Password reset link sent! Check your email."),
+          backgroundColor: Colors.green,
+        ),
+      );
 
-  //     _isLoading.value = false;
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(
-  //         content: Text("Password reset link sent! Check your email."),
-  //         backgroundColor: Colors.green,
-  //       ),
-  //     );
-  //     _emailController.clear();
-  //   } on FirebaseAuthException catch (e) {
-  //     _isLoading.value = false;
-  //     String errorMessage;
-  //     switch (e.code) {
-  //       case "invalid-email":
-  //         errorMessage = "Invalid email format.";
-  //         break;
-  //       case "user-not-found":
-  //         errorMessage = "No account found with this email.";
-  //         break;
-  //       default:
-  //         errorMessage = e.message ?? "Something went wrong. Try again.";
-  //     }
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
-  //     );
-  //   } catch (e) {
-  //     _isLoading.value = false;
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(
-  //         content: Text("Unexpected error occurred. Please try again."),
-  //         backgroundColor: Colors.red,
-  //       ),
-  //     );
-  //   }
-  // }
+      _emailController.clear();
+    } on FirebaseAuthException catch (e) {
+      _isLoading.value = false;
+      String errorMessage;
+
+      switch (e.code) {
+        case "invalid-email":
+          errorMessage = "Invalid email format.";
+          break;
+
+        case "user-not-found":
+          errorMessage = "No account found with this email.";
+          break;
+
+        default:
+          errorMessage = e.message ?? "Something went wrong. Try again.";
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(errorMessage), backgroundColor: Colors.red),
+      );
+    } catch (e) {
+      _isLoading.value = false;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Unexpected error occurred. Please try again."),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +76,9 @@ class ForgotPasswordScreen extends StatelessWidget {
             key: _formKey,
             child: Column(
               children: [
-                const Icon(Icons.lock_reset, size: 100, color: Colors.white),
+                const Icon(Icons.lock_reset, size: 100, color: Colors.blue),
                 const SizedBox(height: 20),
+
                 Text(
                   "Forgot Password?",
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -94,33 +86,41 @@ class ForgotPasswordScreen extends StatelessWidget {
                     color: Colors.black87,
                   ),
                 ),
+
                 const SizedBox(height: 10),
-                Text(
-                  "Enter your registered email and we’ll send you a link to reset your password.",
+
+                const Text(
+                  "Enter your registered email and we'll send you a link to reset your password.",
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.black54),
                 ),
+
                 const SizedBox(height: 30),
+
                 customTextField(
                   "Enter your Email",
                   controller: _emailController,
                   validator: AuthFormValidation.validateEmail,
                 ),
+
                 const SizedBox(height: 30),
+
                 Obx(
                   () => CustomButton(
                     isLoading: _isLoading.value,
                     text: "Send Reset Link",
-                    onPressed: () {},
+                    onPressed: () => _sendResetLink(context),
                   ),
                 ),
+
                 const SizedBox(height: 20),
+
                 TextButton(
                   onPressed: () => Get.back(),
                   child: const Text(
                     "← Back to Login",
                     style: TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

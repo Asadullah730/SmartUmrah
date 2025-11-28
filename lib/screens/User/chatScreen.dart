@@ -65,6 +65,7 @@ class ChatScreen extends StatelessWidget {
           Expanded(
             child: Obx(() {
               final messages = chatController.messages;
+              final participantNames = chatController.participantNames;
 
               if (messages.isEmpty) {
                 return const Center(child: Text("No messages yet"));
@@ -119,6 +120,10 @@ class ChatScreen extends StatelessWidget {
                         final data = msg.data() as Map<String, dynamic>;
                         final isMe =
                             data['senderId'] == chatController.currentUserId;
+                        final senderId = data['senderId'] as String? ?? '';
+                        final senderName =
+                            participantNames[senderId] ??
+                            (isMe ? 'You' : 'Unknown');
                         final ts = data['timestamp'] as Timestamp?;
                         String timeText = ts != null
                             ? chatController.formatTime(ts.toDate())
@@ -141,7 +146,6 @@ class ChatScreen extends StatelessWidget {
                                         chatController.deleteForEveryone(
                                           msg.id,
                                         );
-                                        Navigator.of(ctx).pop();
                                       },
                                       child: const Text(
                                         "Delete for Everyone",
@@ -167,52 +171,73 @@ class ChatScreen extends StatelessWidget {
                             alignment: isMe
                                 ? Alignment.centerRight
                                 : Alignment.centerLeft,
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              margin: const EdgeInsets.symmetric(
-                                vertical: 4,
-                                horizontal: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: isMe
-                                    ? Colors.deepPurple
-                                    : Colors.grey.shade300,
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: isMe
-                                    ? CrossAxisAlignment.end
-                                    : CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    data['text'],
-                                    style: TextStyle(
-                                      color: isMe
-                                          ? Colors.white
-                                          : Colors.black87,
+                            child: Column(
+                              crossAxisAlignment: isMe
+                                  ? CrossAxisAlignment.end
+                                  : CrossAxisAlignment.start,
+                              children: [
+                                if (chatController.isGroupChat && !isMe)
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 8.0,
+                                      bottom: 4,
+                                    ),
+                                    child: Text(
+                                      senderName,
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    mainAxisSize: MainAxisSize.min,
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  margin: const EdgeInsets.symmetric(
+                                    vertical: 4,
+                                    horizontal: 8,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: isMe
+                                        ? Colors.deepPurple
+                                        : Colors.grey.shade300,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment: isMe
+                                        ? CrossAxisAlignment.end
+                                        : CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        timeText,
+                                        data['text'],
                                         style: TextStyle(
-                                          fontSize: 10,
                                           color: isMe
-                                              ? Colors.white70
-                                              : Colors.black54,
+                                              ? Colors.white
+                                              : Colors.black87,
                                         ),
                                       ),
-                                      if (isMe) ...[
-                                        const SizedBox(width: 4),
-                                        _buildTick(status),
-                                      ],
+                                      const SizedBox(height: 4),
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Text(
+                                            timeText,
+                                            style: TextStyle(
+                                              fontSize: 10,
+                                              color: isMe
+                                                  ? Colors.white70
+                                                  : Colors.black54,
+                                            ),
+                                          ),
+                                          if (isMe) ...[
+                                            const SizedBox(width: 4),
+                                            _buildTick(status),
+                                          ],
+                                        ],
+                                      ),
                                     ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
                           ),
                         );

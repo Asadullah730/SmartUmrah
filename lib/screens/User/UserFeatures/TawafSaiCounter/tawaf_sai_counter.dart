@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/Controller/userControllers/tawafSaiCounter/tawaf_sai_counter.dart';
+import 'package:smart_umrah_app/screens/User/UserFeatures/TawafSaiCounter/sai_counter.dart';
 
 class TawafSaiCounter extends StatelessWidget {
   TawafSaiCounter({super.key});
@@ -105,6 +106,28 @@ class TawafSaiCounter extends StatelessWidget {
                 onPressed: controller.reset,
                 icon: const Icon(Icons.refresh),
                 label: const Text("Reset"),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: const Color(0xFF1E3A8A),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 45,
+                    vertical: 15,
+                  ),
+                  textStyle: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  elevation: 6,
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton.icon(
+                onPressed: () => Get.to(() => SaiCounter()),
+                icon: const Icon(Icons.refresh),
+                label: const Text("Sai Counter"),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.white,
                   foregroundColor: const Color(0xFF1E3A8A),

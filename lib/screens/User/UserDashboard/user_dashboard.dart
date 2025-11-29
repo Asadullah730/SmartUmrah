@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/DataLayer/User/UserData/user_features.dart';
+import 'package:smart_umrah_app/Models/UserProfileDataModel/user_profile_datamodel.dart';
 import 'package:smart_umrah_app/Services/firebaseServices/AuthServices/logout.dart';
-import 'package:smart_umrah_app/routes/routes.dart';
+import 'package:smart_umrah_app/Services/firebaseServices/firebaseDatabase/UserProfileData/FetchingProfile/fetch_profile.dart';
 import '../UserFeatures/umrah_journal_screen.dart';
 
 class UserDashboardController extends GetxController {
   var selectedIndex = 0.obs;
 
+  // store the user profile model
+  Rxn<UserProfileDatamodel> currentUser = Rxn<UserProfileDatamodel>();
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadUser();
+  }
+
   void changeTab(int index) {
     selectedIndex.value = index;
+  }
+
+  loadUser() async {
+    final user = await fetchProfile();
+    currentUser.value = user;
+    print("USER DATA LOADED: ${currentUser.value}");
   }
 }
 
@@ -65,10 +81,6 @@ class UserDashboard extends StatelessWidget {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
             BottomNavigationBarItem(icon: Icon(Icons.book), label: 'Journal'),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Settings',
-            ),
           ],
           currentIndex: controller.selectedIndex.value,
           selectedItemColor: navBarSelectedItemColor,
@@ -92,12 +104,14 @@ class UserDashboard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Assalamu Alaikum, Pilgrim!",
-            style: TextStyle(
-              fontSize: screenWidth < 400 ? 20 : 26,
-              fontWeight: FontWeight.bold,
-              color: textColorPrimary,
+          Obx(
+            () => Text(
+              "Assalam u Alaikum, ${controller.currentUser.value?.name ?? 'Guest'}",
+              style: TextStyle(
+                fontSize: screenWidth < 400 ? 20 : 26,
+                fontWeight: FontWeight.bold,
+                color: textColorPrimary,
+              ),
             ),
           ),
           const SizedBox(height: 10),

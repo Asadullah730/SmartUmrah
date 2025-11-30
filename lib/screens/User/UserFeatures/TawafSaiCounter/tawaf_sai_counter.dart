@@ -1,4 +1,3 @@
-// lib/screens/counter_screen.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/Controller/userControllers/tawafSaiCounter/tawaf_sai_counter.dart';

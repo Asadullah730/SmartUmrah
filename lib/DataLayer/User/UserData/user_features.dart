@@ -74,4 +74,11 @@ final List<Map<String, dynamic>> userFeatures = [
     'icon': Icons.person_pin,
     'route': AppRoutes.viewtravelagent,
   },
+
+  {
+    'title': 'InappMessaging',
+    'description': 'Contact your assigned agent/group',
+    'icon': Icons.person_pin,
+    'route': AppRoutes.allChats,
+  },
 ];

@@ -18,6 +18,12 @@ class ChatController extends GetxController {
     if (docSnap.exists) {
       isGroupChat = true;
       chatId = partnerId;
+      // Reset unread count for current user when opening a group chat
+      try {
+        _firestore.collection('chats').doc(chatId).update({
+          'unreadCount_$currentUserId': 0,
+        });
+      } catch (_) {}
     } else {
       isGroupChat = false;
       chatId = _getChatId(currentUserId, partnerId);
@@ -135,12 +141,35 @@ class ChatController extends GetxController {
         'lastMessage': messageText,
         'lastTimestamp': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
+      // Increment unread counter for every participant except the sender
+      final chatDoc = await _firestore.collection('chats').doc(chatId).get();
+      if (chatDoc.exists) {
+        final participants = List<String>.from(
+          chatDoc.data()?['participants'] ?? [],
+        );
+        for (final p in participants) {
+          if (p == currentUserId) continue;
+          try {
+            await _firestore.collection('chats').doc(chatId).update({
+              'unreadCount_$p': FieldValue.increment(1),
+            });
+          } catch (_) {
+            // ignore update errors
+          }
+        }
+      }
     } else {
       await _firestore.collection('chats').doc(chatId).set({
         'participants': [currentUserId, partnerId],
         'lastMessage': messageText,
         'lastTimestamp': FieldValue.serverTimestamp(),
       }, SetOptions(merge: true));
+      // Increment unread for the other user in a 1:1 chat
+      try {
+        await _firestore.collection('chats').doc(chatId).update({
+          'unreadCount_$partnerId': FieldValue.increment(1),
+        });
+      } catch (_) {}
     }
   }
 

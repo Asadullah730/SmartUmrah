@@ -75,17 +75,17 @@ class AdminManageAgentsScreen extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       // Edit Button
-                      IconButton(
-                        icon: const Icon(Icons.edit, color: Colors.blue),
-                        onPressed: () {
-                          Get.to(
-                            () => EditAgentProfileAdminScreen(
-                              agentId: agentId,
-                              agentData: agent,
-                            ),
-                          );
-                        },
-                      ),
+                      // IconButton(
+                      //   icon: const Icon(Icons.edit, color: Colors.blue),
+                      //   onPressed: () {
+                      //     Get.to(
+                      //       () => EditAgentProfileAdminScreen(
+                      //         agentId: agentId,
+                      //         agentData: agent,
+                      //       ),
+                      //     );
+                      //   },
+                      // ),
 
                       // Delete Button
                       IconButton(

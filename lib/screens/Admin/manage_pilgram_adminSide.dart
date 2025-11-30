@@ -80,16 +80,6 @@ class AdminManagePilgrimsScreen extends StatelessWidget {
                     },
                     itemBuilder: (context) => [
                       const PopupMenuItem(
-                        value: "edit",
-                        child: Row(
-                          children: [
-                            Icon(Icons.edit, color: Colors.blue),
-                            SizedBox(width: 10),
-                            Text("Update"),
-                          ],
-                        ),
-                      ),
-                      const PopupMenuItem(
                         value: "delete",
                         child: Row(
                           children: [

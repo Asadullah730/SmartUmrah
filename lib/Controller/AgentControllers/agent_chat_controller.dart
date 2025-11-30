@@ -113,36 +113,37 @@ class AgentChatController extends GetxController {
     }
   }
 
-  Future<void> sendMessage(String partnerId, String messageText) async {
-    if (messageText.trim().isEmpty) return;
+  Future<void> sendMessage(String chatId, String text) async {
+    if (text.trim().isEmpty) return;
+
+    final chatRef = _firestore.collection('chats').doc(chatId);
 
     final messageData = {
+      'text': text.trim(),
       'senderId': currentUserId,
-      'receiverId': isGroupChat ? '' : partnerId,
-      'text': messageText,
       'timestamp': FieldValue.serverTimestamp(),
       'status': 'sent',
       'deletedFor': [],
     };
 
-    final messageRef = _firestore
-        .collection('chats')
-        .doc(chatId)
-        .collection('messages');
+    await chatRef.collection('messages').add(messageData);
 
-    await messageRef.add(messageData);
+    // Update last message info
+    await chatRef.update({
+      'lastMessage': text,
+      'lastTimestamp': FieldValue.serverTimestamp(),
+      'lastMessageStatus': 'sent',
+      'lastSenderId': currentUserId,
+    });
 
-    if (isGroupChat) {
-      await _firestore.collection('chats').doc(chatId).set({
-        'lastMessage': messageText,
-        'lastTimestamp': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
-    } else {
-      await _firestore.collection('chats').doc(chatId).set({
-        'participants': [currentUserId, partnerId],
-        'lastMessage': messageText,
-        'lastTimestamp': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+    // **Increment unread count for all participants except sender**
+    final chatSnapshot = await chatRef.get();
+    final participants = List<String>.from(chatSnapshot['participants']);
+    for (var participantId in participants) {
+      if (participantId == currentUserId) continue;
+
+      final unreadKey = 'unreadCount_$participantId';
+      chatRef.update({unreadKey: FieldValue.increment(1)});
     }
   }
 

@@ -54,7 +54,6 @@ class AllChatsScreen extends StatelessWidget {
                 (id) => id != currentUserId,
                 orElse: () => '',
               );
-              // Detect group chat
 
               final lastMessage = data['lastMessage'] ?? "Tap to chat";
               final lastStatus = data.containsKey('lastMessageStatus')
@@ -73,6 +72,13 @@ class AllChatsScreen extends StatelessWidget {
               }
 
               final isGroupChat = participants.length > 2;
+
+              // Unread message count
+              final unreadCountKey = 'unreadCount_$currentUserId';
+              final unreadCount = data.containsKey(unreadCountKey)
+                  ? (data[unreadCountKey] as int?) ?? 0
+                  : 0;
+
               return FutureBuilder<DocumentSnapshot?>(
                 future: isGroupChat
                     ? Future.value(null)
@@ -103,16 +109,70 @@ class AllChatsScreen extends StatelessWidget {
                       : userData?['profileImageUrl'];
 
                   return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.deepPurple,
-                      backgroundImage:
-                          profileImageUrl != null && profileImageUrl.isNotEmpty
-                          ? NetworkImage(profileImageUrl)
-                          : null,
-                      child: profileImageUrl == null || profileImageUrl.isEmpty
-                          ? const Icon(Icons.person, color: Colors.white)
-                          : null,
+                    leading: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        // Avatar
+                        isGroupChat
+                            ? CircleAvatar(
+                                backgroundColor: Colors.deepPurple,
+                                child: const Icon(
+                                  Icons.group,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : CircleAvatar(
+                                backgroundColor: Colors.deepPurple,
+                                backgroundImage:
+                                    profileImageUrl != null &&
+                                        profileImageUrl.isNotEmpty
+                                    ? NetworkImage(profileImageUrl)
+                                    : null,
+                                child:
+                                    profileImageUrl == null ||
+                                        profileImageUrl.isEmpty
+                                    ? const Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                      )
+                                    : null,
+                              ),
+
+                        // 🔴 UNREAD BADGE
+                        if (unreadCount > 0)
+                          Positioned(
+                            right: -4,
+                            top: -4,
+                            child: Container(
+                              padding: const EdgeInsets.all(6),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: Colors.white,
+                                  width: 2,
+                                ),
+                              ),
+                              constraints: const BoxConstraints(
+                                minWidth: 20,
+                                minHeight: 20,
+                              ),
+                              child: Text(
+                                unreadCount > 99
+                                    ? "99+"
+                                    : unreadCount.toString(),
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
+
                     title: Text(partnerName),
                     subtitle: Row(
                       children: [
@@ -128,14 +188,17 @@ class AllChatsScreen extends StatelessWidget {
                         ),
                       ],
                     ),
+
                     trailing: Text(
                       formattedTime,
                       style: const TextStyle(color: Colors.grey, fontSize: 12),
                     ),
+
                     onTap: () async {
                       final chatId = isGroupChat
                           ? chatDoc.id
                           : getChatId(currentUserId, partnerId);
+
                       final chatRef = _firestore
                           .collection('chats')
                           .doc(chatId);
@@ -151,6 +214,11 @@ class AllChatsScreen extends StatelessWidget {
                         });
                       }
 
+                      // Reset unread count
+                      try {
+                        await chatRef.update({unreadCountKey: 0});
+                      } catch (_) {}
+
                       Get.to(
                         () => ChatScreen(
                           partnerId: isGroupChat ? chatDoc.id : partnerId,
@@ -159,6 +227,7 @@ class AllChatsScreen extends StatelessWidget {
                         ),
                       );
                     },
+
                     onLongPress: () {
                       _showDeleteDialog(context, chatDoc.id);
                     },
@@ -172,7 +241,7 @@ class AllChatsScreen extends StatelessWidget {
     );
   }
 
-  /// build ticks like WhatsApp
+  /// WhatsApp-like message ticks
   Widget _buildMessageStatusIcon(String status) {
     switch (status) {
       case "sent":
@@ -186,7 +255,7 @@ class AllChatsScreen extends StatelessWidget {
     }
   }
 
-  /// delete chat dialog
+  /// Delete chat dialog
   void _showDeleteDialog(BuildContext context, String chatId) {
     showDialog(
       context: context,

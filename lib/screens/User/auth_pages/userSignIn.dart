@@ -120,6 +120,7 @@ class UserSignInScreen extends StatelessWidget {
                                 _emailController.text.trim(),
                                 _passwordController.text.trim(),
                                 context,
+                                AccountType.user,
                               )
                               .then((_) {
                                 _isLoading.value = false;

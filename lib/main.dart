@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:smart_umrah_app/routes/routes.dart';
+import 'package:smart_umrah_app/screens/User/UserFeatures/TawafSaiCounter/sai_counter.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'firebase_options.dart';
 
@@ -28,8 +29,9 @@ class SmartUmrahApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Color(0XFF263442)),
       ),
-      initialRoute: AppRoutes.landingscreen,
-      getPages: AppRoutes().getpags,
+      home: SaiCounter(),
+      // initialRoute: AppRoutes.landingscreen,
+      // getPages: AppRoutes().getpags,
     );
   }
 }
